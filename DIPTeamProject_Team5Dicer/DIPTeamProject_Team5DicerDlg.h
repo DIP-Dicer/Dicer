@@ -5,6 +5,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace cv;
 using namespace std;
@@ -24,6 +26,14 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
+public:
+	Mat m_matImage, m_matImageTemp;
+	BITMAPINFO* m_pBitmapInfo;
+	int turn;
+
+	void CreateBitmapInfo(int width, int height);
+	void DrawImage(int id, Mat m_matImage);
+	String LoadDice();
 
 // 구현입니다.
 protected:
@@ -34,4 +44,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
 };

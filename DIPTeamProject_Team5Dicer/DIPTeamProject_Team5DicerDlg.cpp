@@ -31,6 +31,8 @@ void CDIPTeamProjectTeam5DicerDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDIPTeamProjectTeam5DicerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -84,5 +86,98 @@ void CDIPTeamProjectTeam5DicerDlg::OnPaint()
 HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
+{
+	int imgSize = 400;
+	turn = 0;
+	String team, fileName;
+
+	switch (turn) {
+	case 0:
+		team = "dice\\red_";
+		break;
+	case 1:
+		team = "dice\\blue_";
+		break;
+	case 2:
+		team = "dice\\green_";
+		break;
+	}
+
+	fileName = team + LoadDice();
+
+	m_matImage = imread(fileName, -1);
+	resize(m_matImage, m_matImageTemp, Size(imgSize, imgSize), 0, 0, 1);
+	CreateBitmapInfo(m_matImageTemp.cols, m_matImageTemp.rows);
+	DrawImage(IDC_PIC_VIEW1, m_matImageTemp);
+}
+
+String CDIPTeamProjectTeam5DicerDlg::LoadDice() {
+
+	srand(time(NULL));
+	int randNum = rand() % 6;
+	String imgName;
+
+	switch (randNum) {
+	case 0:
+		imgName = "1.jpg";
+		break;
+	case 1:
+		imgName = "2.jpg";
+		break;
+	case 2:
+		imgName = "3.jpg";
+		break;
+	case 3:
+		imgName = "4.jpg";
+		break;
+	case 4:
+		imgName = "5.jpg";
+		break;
+	case 5:
+		imgName = "6.jpg";
+		break;
+	}
+
+	return imgName;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::CreateBitmapInfo(int width, int height) { //mat 이미지 별로 BITMAPINFO 구조체 생성
+	if (m_pBitmapInfo != NULL) {
+		delete m_pBitmapInfo;
+		m_pBitmapInfo = NULL;
+	}
+
+	m_pBitmapInfo = (BITMAPINFO*) new BYTE[sizeof(BITMAPINFO)];
+
+	m_pBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	m_pBitmapInfo->bmiHeader.biWidth = width;
+	m_pBitmapInfo->bmiHeader.biHeight = -height;
+	m_pBitmapInfo->bmiHeader.biPlanes = 1;
+	m_pBitmapInfo->bmiHeader.biBitCount = 24;
+	m_pBitmapInfo->bmiHeader.biCompression = BI_RGB;
+	m_pBitmapInfo->bmiHeader.biSizeImage = 0;
+	m_pBitmapInfo->bmiHeader.biXPelsPerMeter = 0;
+	m_pBitmapInfo->bmiHeader.biYPelsPerMeter = 0;
+	m_pBitmapInfo->bmiHeader.biClrUsed = 0;
+	m_pBitmapInfo->bmiHeader.biClrImportant = 0;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { //각 Picture control에 이미지 띄움
+	CClientDC dc(GetDlgItem(id));
+	CRect rect;
+	GetDlgItem(id)->GetClientRect(&rect);
+
+	dc.SetStretchBltMode(COLORONCOLOR);
+
+	StretchDIBits(dc.GetSafeHdc(), 0, 0, rect.Width(), rect.Height(), 0, 0, m_matImage.cols, m_matImage.rows, m_matImage.data, m_pBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
+}
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
