@@ -29,7 +29,7 @@ public:
 public:
 	Mat m_matImage, m_matImageTemp;
 	BITMAPINFO* m_pBitmapInfo;
-	int turn;
+	int turn = 0;
 
 	void CreateBitmapInfo(int width, int height);
 	void DrawImage(int id, Mat m_matImage);

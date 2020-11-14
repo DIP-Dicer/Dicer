@@ -92,10 +92,9 @@ HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
 {
 	int imgSize = 400;
-	turn = 0;
 	String team, fileName;
 
-	switch (turn) {
+	switch (turn % 3) {
 	case 0:
 		team = "dice\\red_";
 		break;
@@ -108,6 +107,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
 	}
 
 	fileName = team + LoadDice();
+	turn++;
 
 	m_matImage = imread(fileName, -1);
 	resize(m_matImage, m_matImageTemp, Size(imgSize, imgSize), 0, 0, 1);
