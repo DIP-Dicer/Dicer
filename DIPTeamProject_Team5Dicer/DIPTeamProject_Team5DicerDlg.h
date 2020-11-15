@@ -24,13 +24,15 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);
 
 public:
-	Mat m_matImg1, m_matImg2, m_matImage1, m_matImage2;
+	Mat m_matImg1, m_matImg2, m_matImage1, m_matImage2; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
 	BITMAPINFO* m_pBitmapInfo;
-	int turn = 0;
+	int imgSize = 400, turn = 0; // turn은 현재 순서인 팀
 
 	void CreateBitmapInfo(int width, int height);
 	void DrawImage(int id, Mat m_matImage);
 	String LoadDice();
+	void CountPips(Mat m_matImage);
+	void MoveMarker(Mat m_matImage);
 
 protected:
 	HICON m_hIcon;

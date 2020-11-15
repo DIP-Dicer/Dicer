@@ -33,8 +33,6 @@ BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
 
-	// TODO: 여기에 추가 초기화 작업을 추가
-
 	return TRUE;
 }
 
@@ -60,8 +58,9 @@ void CDIPTeamProjectTeam5DicerDlg::OnPaint()
 	{
 		CDialogEx::OnPaint();
 
+		//보드 이미지 이미지 띄울라고 한 번 만들어본거니까 보드 판별하는 사람이 바꿔도 됩니당!
 		m_matImg2 = imread("dice\\board.jpg", -1);
-		resize(m_matImg2, m_matImage2, Size(400, 400), 0, 0, 1);
+		resize(m_matImg2, m_matImage2, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 	}
@@ -73,11 +72,12 @@ HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 }
 
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
-{
-	int imgSize = 400;
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리기' 버튼 클릭하면 red, blue, green 팀 순서대로 랜덤하게 주사위 이미지 띄움
+
 	String team, fileName;
 
+	//대충 사진 로드 잘 되는지 보려고 짠 차례 돌아가는 부분
+	//게임 룰 구현하는 사람이 다른 말 잡으면 한 번 더 기회 있는 거 구현해쥬세용!
 	switch (turn % 3) {
 	case 0:
 		team = "dice\\red_";
@@ -99,7 +99,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
 	DrawImage(IDC_PIC_VIEW1, m_matImage1);
 }
 
-String CDIPTeamProjectTeam5DicerDlg::LoadDice() {
+String CDIPTeamProjectTeam5DicerDlg::LoadDice() { // 난수 받아서 주사위 눈 1~6 결정
 
 	srand(time(NULL));
 	int randNum = rand() % 6;
@@ -123,7 +123,8 @@ String CDIPTeamProjectTeam5DicerDlg::LoadDice() {
 	return imgName;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::CreateBitmapInfo(int width, int height) { //mat 이미지 별로 BITMAPINFO 구조체 생성
+void CDIPTeamProjectTeam5DicerDlg::CreateBitmapInfo(int width, int height) { // mat 이미지 별로 BITMAPINFO 구조체 생성
+
 	if (m_pBitmapInfo != NULL) {
 		delete m_pBitmapInfo;
 		m_pBitmapInfo = NULL;
@@ -144,7 +145,8 @@ void CDIPTeamProjectTeam5DicerDlg::CreateBitmapInfo(int width, int height) { //m
 	m_pBitmapInfo->bmiHeader.biClrImportant = 0;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { //각 Picture control에 이미지 띄움
+void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Picture control에 이미지 띄움
+
 	CClientDC dc(GetDlgItem(id));
 	CRect rect;
 	GetDlgItem(id)->GetClientRect(&rect);
@@ -154,7 +156,43 @@ void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { //각 Pic
 	StretchDIBits(dc.GetSafeHdc(), 0, 0, rect.Width(), rect.Height(), 0, 0, m_matImage.cols, m_matImage.rows, m_matImage.data, m_pBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 }
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
-{
-	
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
+
+	MoveMarker(m_matImage2);
+}
+
+void CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (MoveMarker 함수에서 호출됨)
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int red, green, blue;
+
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+
+
+		}
+	}
+}
+
+void CDIPTeamProjectTeam5DicerDlg::MoveMarker(Mat m_matImage) { // 말 움직이기 (Button2 클릭 함수에서 호출됨)
+
+	CountPips(m_matImage1); // 현재 순서인 팀 정보와 주사위 눈 정보 가져옴
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int red, green, blue;
+
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+
+
+		}
+	}
 }
