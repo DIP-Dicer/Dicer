@@ -165,7 +165,6 @@ void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Pi
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
 
 	UpdateBoard(m_matImage2);
-	//UpdateBoard(Binarization(m_matImage2));
 }
 
 Mat CDIPTeamProjectTeam5DicerDlg::Binarization(Mat m_matImage) { // 보드 이미지 이진화 시켜서 네모칸 식별하기 편하게
@@ -229,13 +228,11 @@ void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재
 	// 이동할 위치 계산
 }
 
-void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
+void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int red, green, blue;
-
-	CalculatePosition(m_matImage2); // 현재 순서인 팀, 이동할 위치 정보 가져옴
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -243,7 +240,26 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 			green = m_matImage.at<Vec3b>(x, y)[1];
 			red = m_matImage.at<Vec3b>(x, y)[2];
 
-			//각 칸이 무슨 픽셀로 이루어져있는지 구분, 말을 이동시킴
+		}
+	}
+}
+
+void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int red, green, blue;
+
+	CalculatePosition(m_matImage2); // 현재 순서인 팀, 이동할 위치 정보 가져옴
+	DistributeCell(Binarization(m_matImage2));
+
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+
+			// 말을 이동시킴
 			
 		}
 	}

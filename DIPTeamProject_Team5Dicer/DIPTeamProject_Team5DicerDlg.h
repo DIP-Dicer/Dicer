@@ -35,6 +35,7 @@ public:
 	Mat Binarization(Mat m_matImage);
 	void CountPips(Mat m_matImage);
 	void CalculatePosition(Mat m_matImage);
+	void DistributeCell(Mat m_matImage);
 	void UpdateBoard(Mat m_matImage);
 
 protected:
