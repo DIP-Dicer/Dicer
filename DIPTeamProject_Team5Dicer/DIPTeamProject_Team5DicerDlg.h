@@ -30,9 +30,12 @@ public:
 
 	void CreateBitmapInfo(int width, int height);
 	void DrawImage(int id, Mat m_matImage);
+	String ChangeTurn();
 	String LoadDice();
+	Mat Binarization(Mat m_matImage);
 	void CountPips(Mat m_matImage);
-	void MoveMarker(Mat m_matImage);
+	void CalculatePosition(Mat m_matImage);
+	void UpdateBoard(Mat m_matImage);
 
 protected:
 	HICON m_hIcon;

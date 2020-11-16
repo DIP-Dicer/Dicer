@@ -58,7 +58,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnPaint()
 	{
 		CDialogEx::OnPaint();
 
-		//보드 이미지 이미지 띄울라고 한 번 만들어본거니까 보드 판별하는 사람이 바꿔도 됩니당!
+		//보드 이미지는 테스트 해볼라고 한 번 만들어본거니까 보드 판별하는 사람이 바꿔쥬세욥
 		m_matImg2 = imread("dice\\board.jpg", -1);
 		resize(m_matImg2, m_matImage2, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
@@ -74,10 +74,21 @@ HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리기' 버튼 클릭하면 red, blue, green 팀 순서대로 랜덤하게 주사위 이미지 띄움
 
-	String team, fileName;
+	String fileName;
 
-	//대충 사진 로드 잘 되는지 보려고 짠 차례 돌아가는 부분
-	//게임 룰 구현하는 사람이 다른 말 잡으면 한 번 더 기회 있는 거 구현해쥬세용!
+	fileName = ChangeTurn() + LoadDice();
+
+	m_matImg1 = imread(fileName, -1);
+	resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
+	CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
+	DrawImage(IDC_PIC_VIEW1, m_matImage1);
+}
+
+String CDIPTeamProjectTeam5DicerDlg::ChangeTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
+
+	//대충 사진 로드 잘 되는지 보려고 짠거니까 순서 구현하는 사람이 므시께 잘 구현해쥬세용!
+	String team;
+
 	switch (turn % 3) {
 	case 0:
 		team = "dice\\red_";
@@ -90,13 +101,8 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리�
 		break;
 	}
 
-	fileName = team + LoadDice();
 	turn++;
-
-	m_matImg1 = imread(fileName, -1);
-	resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
-	CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
-	DrawImage(IDC_PIC_VIEW1, m_matImage1);
+	return team;
 }
 
 String CDIPTeamProjectTeam5DicerDlg::LoadDice() { // 난수 받아서 주사위 눈 1~6 결정
@@ -158,10 +164,34 @@ void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Pi
 
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
 
-	MoveMarker(m_matImage2);
+	UpdateBoard(m_matImage2);
+	//UpdateBoard(Binarization(m_matImage2));
 }
 
-void CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (MoveMarker 함수에서 호출됨)
+Mat CDIPTeamProjectTeam5DicerDlg::Binarization(Mat m_matImage) { // 보드 이미지 이진화 시켜서 네모칸 식별하기 편하게
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int color, blue, green, red;
+	Mat m_matImg = Mat::zeros(height, width, m_matImage.type());
+
+	for (int y = 0; y < width; y++) {
+		for (int x = 0; x < height; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+			color = (blue + green + red) / 3;
+
+			if (color > 180)
+				m_matImg.at<Vec3b>(x, y) = Vec3b(255, 255, 255);
+			else
+				m_matImg.at<Vec3b>(x, y) = Vec3b(0, 0, 0);
+		}
+	}
+	return m_matImg;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (CalculatePosition 함수에서 호출됨)
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
@@ -173,18 +203,39 @@ void CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 
 			green = m_matImage.at<Vec3b>(x, y)[1];
 			red = m_matImage.at<Vec3b>(x, y)[2];
 
-
+			// 색깔 식별, 주사위 눈 개수 식별
 		}
 	}
 }
 
-void CDIPTeamProjectTeam5DicerDlg::MoveMarker(Mat m_matImage) { // 말 움직이기 (Button2 클릭 함수에서 호출됨)
+void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int red, green, blue;
 
 	CountPips(m_matImage1); // 현재 순서인 팀 정보와 주사위 눈 정보 가져옴
 
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+
+			// 팀의 현재 위치 파악
+		}
+	}
+
+	// 이동할 위치 계산
+}
+
+void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
+
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int red, green, blue;
+
+	CalculatePosition(m_matImage2); // 현재 순서인 팀, 이동할 위치 정보 가져옴
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -192,7 +243,9 @@ void CDIPTeamProjectTeam5DicerDlg::MoveMarker(Mat m_matImage) { // 말 움직이
 			green = m_matImage.at<Vec3b>(x, y)[1];
 			red = m_matImage.at<Vec3b>(x, y)[2];
 
-
+			//각 칸이 무슨 픽셀로 이루어져있는지 구분, 말을 이동시킴
+			
 		}
 	}
+
 }
