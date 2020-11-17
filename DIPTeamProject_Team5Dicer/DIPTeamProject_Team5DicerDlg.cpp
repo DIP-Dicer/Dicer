@@ -274,7 +274,7 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
 	CalculatePosition(m_matImage2); // 이동할 위치 정보 가져옴
-	DistributeCell(Binarization(m_matImage2));
+	DistributeCell(m_matImage2);
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
