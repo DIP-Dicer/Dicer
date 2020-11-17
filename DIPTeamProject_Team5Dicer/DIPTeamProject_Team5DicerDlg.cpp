@@ -244,12 +244,13 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
-	int color;
-	// 칸 구별해주는 부분은 binarization 된 픽셀 컬러값 사용하는 거라 blue/green/red 어차피 값 다 똑같고 배경/칸 값만 구별해주면 되는 것 같아서 컬러변수 하나만 만들었어욤 (0 아니면 255)
+	int red, green, blue;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			color = m_matImage.at<Vec3b>(x, y)[0];
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
 
 		}
 	}
