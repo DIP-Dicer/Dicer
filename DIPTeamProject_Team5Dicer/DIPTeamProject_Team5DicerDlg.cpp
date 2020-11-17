@@ -86,7 +86,9 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리�
 
 String CDIPTeamProjectTeam5DicerDlg::ChangeTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
 
-	//대충 사진 로드 잘 되는지 보려고 짠거니까 순서 구현하는 사람이 므시께 잘 구현해쥬세용!
+	// 대충 사진 로드 잘 되는지 보려고 짠거니까 순서 구현하는 사람이 므시께 잘 구현해쥬세용!
+	// 이런식으로 파일 이름의 일부가 되는 string만 반환해주면 됩니다
+
 	String team;
 
 	switch (turn % 3) {
@@ -151,7 +153,7 @@ void CDIPTeamProjectTeam5DicerDlg::CreateBitmapInfo(int width, int height) { // 
 	m_pBitmapInfo->bmiHeader.biClrImportant = 0;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Picture control에 이미지 띄움
+void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Picture control에 주사위와 보드 이미지 띄움
 
 	CClientDC dc(GetDlgItem(id));
 	CRect rect;
@@ -160,6 +162,14 @@ void CDIPTeamProjectTeam5DicerDlg::DrawImage(int id, Mat m_matImage) { // 각 Pi
 	dc.SetStretchBltMode(COLORONCOLOR);
 
 	StretchDIBits(dc.GetSafeHdc(), 0, 0, rect.Width(), rect.Height(), 0, 0, m_matImage.cols, m_matImage.rows, m_matImage.data, m_pBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
+}
+
+int CDIPTeamProjectTeam5DicerDlg::GetCurrentTurn() {
+
+	// 아래 함수들에서 next turn 값보다는 현재 차례를 필요로 하는 게 많은 것 같아서 current turn 반환하는 함수를 만들긴 했는데
+	// 차피 전역변수라 먼가 굳이 있어야 하나.... 이런 느낌
+
+	return turn;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
@@ -190,21 +200,23 @@ Mat CDIPTeamProjectTeam5DicerDlg::Binarization(Mat m_matImage) { // 보드 이�
 	return m_matImg;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (CalculatePosition 함수에서 호출됨)
+int CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (CalculatePosition 함수에서 호출됨)
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
-	int red, green, blue;
+	int color;
+	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
+	int pips;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			blue = m_matImage.at<Vec3b>(x, y)[0];
-			green = m_matImage.at<Vec3b>(x, y)[1];
-			red = m_matImage.at<Vec3b>(x, y)[2];
+			color = m_matImage.at<Vec3b>(x, y)[0];
 
-			// 색깔 식별, 주사위 눈 개수 식별
+			// 주사위 눈 개수 식별
 		}
 	}
+
+	return pips;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
@@ -212,8 +224,8 @@ void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int red, green, blue;
-
-	CountPips(m_matImage1); // 현재 순서인 팀 정보와 주사위 눈 정보 가져옴
+	int pips = CountPips(Binarization(m_matImage1)); // 주사위 눈 개수
+	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -228,20 +240,29 @@ void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재
 	// 이동할 위치 계산
 }
 
-void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분
+void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
-	int red, green, blue;
+	int color;
+	// 칸 구별해주는 부분은 binarization 된 픽셀 컬러값 사용하는 거라 blue/green/red 어차피 값 다 똑같고 배경/칸 값만 구별해주면 되는 것 같아서 컬러변수 하나만 만들었어욤 (0 아니면 255)
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			blue = m_matImage.at<Vec3b>(x, y)[0];
-			green = m_matImage.at<Vec3b>(x, y)[1];
-			red = m_matImage.at<Vec3b>(x, y)[2];
+			color = m_matImage.at<Vec3b>(x, y)[0];
 
 		}
 	}
+}
+
+Mat CDIPTeamProjectTeam5DicerDlg::ResizeMarker(int cellsize, Mat m_matImage) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
+
+	Mat m_matImageTemp;
+
+	// 보드 칸이 정사각형이라는 가정 (왠지 정사각형으러 만들것같다!!?!!)
+	resize(m_matImage, m_matImageTemp, Size(cellsize, cellsize), 0, 0, 1);
+
+	return m_matImageTemp;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
@@ -249,8 +270,10 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int red, green, blue;
+	//Mat marker_matImage = ResizeMarker(셀크기, imread("말 이미지 파일 이름.jpg", -1)); 리사이즈된 말 이미지가 된다
+	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
-	CalculatePosition(m_matImage2); // 현재 순서인 팀, 이동할 위치 정보 가져옴
+	CalculatePosition(m_matImage2); // 이동할 위치 정보 가져옴
 	DistributeCell(Binarization(m_matImage2));
 
 	for (int y = 0; y < height; y++) {
@@ -264,3 +287,6 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 		}
 	}
 }
+
+// 반환값 도통 모르겠는 부분은 일단 void로 해놨어욥
+// 엥? 이게 뭐야? 싶은 부분이 있우먄 당장 슬랙에다 서율아 멍청한 놈아~~~~~~!~!~! 이게 뭐야~~~~~~~!~! 외쳐주시길...........

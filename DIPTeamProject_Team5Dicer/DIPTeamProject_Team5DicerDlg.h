@@ -32,10 +32,12 @@ public:
 	void DrawImage(int id, Mat m_matImage);
 	String ChangeTurn();
 	String LoadDice();
+	int GetCurrentTurn();
 	Mat Binarization(Mat m_matImage);
-	void CountPips(Mat m_matImage);
+	int CountPips(Mat m_matImage);
 	void CalculatePosition(Mat m_matImage);
 	void DistributeCell(Mat m_matImage);
+	Mat ResizeMarker(int cellsize, Mat m_matImage);
 	void UpdateBoard(Mat m_matImage);
 
 protected:
