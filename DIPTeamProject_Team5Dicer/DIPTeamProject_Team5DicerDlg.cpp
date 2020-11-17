@@ -263,5 +263,4 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 			
 		}
 	}
-
 }
