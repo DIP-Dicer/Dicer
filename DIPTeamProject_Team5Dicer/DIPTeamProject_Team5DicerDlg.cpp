@@ -75,14 +75,82 @@ HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리기' 버튼 클릭하면 red, blue, green 팀 순서대로 랜덤하게 주사위 이미지 띄움
 
 	String fileName;
+	int red, blue, green;
+	int width, height;
+	bool exitOuterLoop = false;
 
-	fileName = ChangeTurn() + LoadDice();
+	while (true) { //현재 팀 값과 주사위 색깔이 같으면 반복문 탈출
 
-	m_matImg1 = imread(fileName, -1);
-	resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
-	CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
-	DrawImage(IDC_PIC_VIEW1, m_matImage1);
+		fileName = ChangeTurn() + LoadDice();
+
+		m_matImg1 = imread(fileName, -1);
+		resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
+		CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
+		DrawImage(IDC_PIC_VIEW1, m_matImage1);
+
+		width = m_matImage1.cols;
+		height = m_matImage1.rows;
+
+		for (int y = 0; y < width; y++) {
+			for (int x = 0; x < height; x++) {
+				blue = m_matImage1.at<Vec3b>(x, y)[0];
+				green = m_matImage1.at<Vec3b>(x, y)[1];
+				red = m_matImage1.at<Vec3b>(x, y)[2];
+
+				blue; green; red;
+
+				if (blue > 10 && blue < 200) {
+					exitOuterLoop = true;
+					break;
+				}
+			}
+
+			if (exitOuterLoop == true)
+				break;
+		}
+
+		// 현재 주사위 red (255, 80, 80) blue (78, 147, 210) green (102, 158, 64)
+		if (red > 150 && GetCurrentTurn() == 0)
+			break;
+		else if (blue > 150 && GetCurrentTurn() == 1)
+			break;
+		else if (green > 150 && GetCurrentTurn() == 2)
+			break;
+	}
 }
+
+int CDIPTeamProjectTeam5DicerDlg::GetDiceColor(Mat m_matImage, int* d_red, int* d_green, int* d_blue) {
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+	int red, green, blue;
+	bool exitOuterLoop = false;
+
+	for (int y = 0; y < width; y++) {
+		for (int x = 0; x < height; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
+
+			// 검은색인 부분은 0, 0, 0이고 흰색인 부분은 255, 255, 255
+			// blue의 intensity가 10~200이면 숫자 부분이라고 가정한다
+			if (blue > 10 && blue < 200) {
+				*d_red = red;
+				*d_green = green;
+				*d_blue = blue;
+
+				exitOuterLoop = true;
+				break;
+			}
+		}
+
+		if (exitOuterLoop == true)
+			break;
+	}
+
+	return 0;
+}
+
 
 String CDIPTeamProjectTeam5DicerDlg::ChangeTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
 
@@ -169,7 +237,7 @@ int CDIPTeamProjectTeam5DicerDlg::GetCurrentTurn() {
 	// 아래 함수들에서 next turn 값보다는 현재 차례를 필요로 하는 게 많은 것 같아서 current turn 반환하는 함수를 만들긴 했는데
 	// 차피 전역변수라 먼가 굳이 있어야 하나.... 이런 느낌
 
-	return turn;
+	return turn % 3;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
