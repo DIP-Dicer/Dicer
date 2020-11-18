@@ -200,13 +200,13 @@ Mat CDIPTeamProjectTeam5DicerDlg::Binarization(Mat m_matImage) { // 보드 이�
 	return m_matImg;
 }
 
-int CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 세기 (CalculatePosition 함수에서 호출됨)
+int CDIPTeamProjectTeam5DicerDlg::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int color;
 	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
-	int pips = 0;
+	int diceNum = 0;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -216,7 +216,7 @@ int CDIPTeamProjectTeam5DicerDlg::CountPips(Mat m_matImage) { // 주사위 눈 �
 		}
 	}
 
-	return pips;
+	return diceNum;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
@@ -224,7 +224,7 @@ void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
 	int red, green, blue;
-	int pips = CountPips(Binarization(m_matImage1)); // 주사위 눈 개수
+	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
 	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
 	for (int y = 0; y < height; y++) {
