@@ -63,6 +63,10 @@ void CDIPTeamProjectTeam5DicerDlg::OnPaint()
 		resize(m_matImg2, m_matImage2, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
+
+		// 율아 처음에 UpdateBoard에 이거 뒀는데, 그러면 판에 말 놓을 때 마다 칸을 식별하게 되서
+		// 처음에 판 이미지 불러오고 바로 되도록!
+		DistributeCell(m_matImage2);
 	}
 }
 
@@ -81,7 +85,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리�
 
 	while (true) { //현재 팀 값과 주사위 색깔이 같으면 반복문 탈출
 
-		fileName = ChangeTurn() + LoadDice();
+		fileName = CurrentDiceTurn() + LoadDice();
 
 		m_matImg1 = imread(fileName, -1);
 		resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
@@ -118,15 +122,16 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // '주사위 굴리�
 			break;
 	}
 }
-
-String CDIPTeamProjectTeam5DicerDlg::ChangeTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
+String CDIPTeamProjectTeam5DicerDlg::CurrentDiceTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
 
 	// 대충 사진 로드 잘 되는지 보려고 짠거니까 순서 구현하는 사람이 므시께 잘 구현해쥬세용!
 	// 이런식으로 파일 이름의 일부가 되는 string만 반환해주면 됩니다
 
 	String team;
 
-	switch (turn % 3) {
+	int turn = GetCurrentTurn();
+
+	switch (turn) {
 	case 0:
 		team = "dice\\red_";
 		break;
@@ -138,7 +143,6 @@ String CDIPTeamProjectTeam5DicerDlg::ChangeTurn() { // 순서 바꾸기 (red/blu
 		break;
 	}
 
-	turn++;
 	return team;
 }
 
@@ -204,7 +208,37 @@ int CDIPTeamProjectTeam5DicerDlg::GetCurrentTurn() {
 	// 아래 함수들에서 next turn 값보다는 현재 차례를 필요로 하는 게 많은 것 같아서 current turn 반환하는 함수를 만들긴 했는데
 	// 차피 전역변수라 먼가 굳이 있어야 하나.... 이런 느낌
 
+	// ---->민지 : turn private로 옮김
+
 	return turn;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::ChangeTurn(int nowTurn, int pos) {
+	switch (nowTurn) {
+	case 0:
+		if (IsBlueCatch(pos) || IsGreenCatch(pos)) {
+			turn = nowTurn;
+		}
+		else {
+			turn++;
+		}
+		break;
+	case 1:
+		if (IsRedCatch(pos) || IsGreenCatch(pos)) {
+			turn = nowTurn;
+		}
+		else {
+			turn++;
+		}
+		break;
+	case 2:
+		if (IsRedCatch(pos) || IsBlueCatch(pos)) {
+			turn = nowTurn;
+		}
+		else {
+			turn = 0;
+		}
+	}
 }
 
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
@@ -254,25 +288,14 @@ int CDIPTeamProjectTeam5DicerDlg::RecognizeDiceNum(Mat m_matImage) { // 주사�
 	return diceNum;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::CalculatePosition(Mat m_matImage) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
+int  CDIPTeamProjectTeam5DicerDlg::CalculatePosition(int pos) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
 
-	int width = m_matImage.cols;
-	int height = m_matImage.rows;
-	int red, green, blue;
 	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
-	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
+	int tmp = pos + pips;
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			blue = m_matImage.at<Vec3b>(x, y)[0];
-			green = m_matImage.at<Vec3b>(x, y)[1];
-			red = m_matImage.at<Vec3b>(x, y)[2];
+	// 특수 칸에 대한 계산도 추가적으로 해야함.(특수 칸 규칙 정해지면 할거임)
 
-			// 팀의 현재 위치 파악
-		}
-	}
-
-	// 이동할 위치 계산
+	return pos;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
@@ -281,6 +304,12 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 	int height = m_matImage.rows;
 	int red, green, blue;
 
+	//민지 추가 - 소현아 여기에 셀 구분하는거 넣으면 되는데, header 파일에 보면 구조체있고, 그 구조체로 cells라는 변수 만들어놨거든.
+	//그거 이용해서 일단 여기에 Cell tmp; 이렇게 임시 변수 만들고
+	//tmp.min.first = 최소 x값 tmp.min.second = 최소 y값 이런식으로 최소/최대 x,y값 넣어주고
+	//cells.push_back(tmp) 이렇게 해주면 돼!
+	//구조체 내용 바꾸고 싶으면 바꿔도 됑 근데 그러면 내 부분도 바꿔야해서 말해주랏!!
+
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 			blue = m_matImage.at<Vec3b>(x, y)[0];
@@ -289,16 +318,64 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 
 		}
 	}
+
+	//일단은 민지 연습용으로 한건데 소현이 참고하면 될듯
+	
+	/*Cell tmp;
+	tmp.min.first = 20;
+	tmp.min.second = 20;
+	tmp.max.first = 40;
+	tmp.max.second = 40;
+	tmp.info = 'b'
+
+	cells.push_back(tmp);*/
+	
 }
 
 Mat CDIPTeamProjectTeam5DicerDlg::ResizeMarker(int cellsize, Mat m_matImage) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
 
 	Mat m_matImageTemp;
 
-	// 보드 칸이 정사각형이라는 가정 (왠지 정사각형으러 만들것같다!!?!!)
+	// 보드 칸이 정사각형이라는 가정 (왠지 정사각형으러 만들것같다!!?!!) - 그래서 민지도 일단 정사각형이라 생각하고 함.
 	resize(m_matImage, m_matImageTemp, Size(cellsize, cellsize), 0, 0, 1);
 
 	return m_matImageTemp;
+}
+
+int CDIPTeamProjectTeam5DicerDlg::GetPosition(int turn) {
+	switch(turn) {
+	case 0:
+		return redPos;
+	case 1:
+		return bluePos;
+	case 2:
+		return greenPos;
+	}
+}
+
+// 잡았을 때 무슨 말이 잡혔습니다! 이런거 나오면 좋을 듯.
+bool CDIPTeamProjectTeam5DicerDlg::IsRedCatch(int pos) {
+	if (redPos == pos) {
+		redPos = 0;
+		return true;
+	}
+	return false;
+}
+
+bool CDIPTeamProjectTeam5DicerDlg::IsBlueCatch(int pos) {
+	if (bluePos == pos) {
+		bluePos = 0;
+		return true;
+	}
+	return false;
+}
+
+bool CDIPTeamProjectTeam5DicerDlg::IsGreenCatch(int pos) {
+	if (greenPos == pos) {
+		greenPos = 0;
+		return true;
+	}
+	return false;
 }
 
 void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
@@ -307,21 +384,37 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 	int height = m_matImage.rows;
 	int red, green, blue;
 	//Mat marker_matImage = ResizeMarker(셀크기, imread("말 이미지 파일 이름.jpg", -1)); 리사이즈된 말 이미지가 된다
+	
 	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
-	CalculatePosition(m_matImage2); // 이동할 위치 정보 가져옴
-	DistributeCell(m_matImage2);
+	int originalPos = GetPosition(turn);
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			blue = m_matImage.at<Vec3b>(x, y)[0];
-			green = m_matImage.at<Vec3b>(x, y)[1];
-			red = m_matImage.at<Vec3b>(x, y)[2];
-
-			// 말을 이동시킴
-			
+	// 원래 말 있던 곳 되돌림. 검은색으로
+	for (int y = cells[originalPos].min.second; y <= cells[originalPos].max.second; y++) {
+		for (int x = cells[originalPos].min.first; x <= cells[originalPos].max.first; x++) {
+			m_matImage.at<Vec3b>(x, y) = (0, 0, 0);
 		}
 	}
+
+	int newPos = CalculatePosition(turn); // 이동할 위치 정보 가져옴
+
+	int size = cells[newPos].max.first - cells[newPos].min.first + 1;
+	Mat marker_matImage = ResizeMarker(size, imread("dice\\red_1.jpg", -1)); // 이 부분도 보드 게임 칸 크기가 다 같다면 매번 여기서 말고 다른데서 한번만 해도 될듓
+
+	int my = 0;
+	int mx = 0;
+	for (int y = cells[newPos].min.second; y <= cells[newPos].max.second; y++) {
+		mx = 0;
+		for (int x = cells[newPos].min.first; x <= cells[newPos].max.first; x++) {
+			m_matImage.at<Vec3b>(x, y) = marker_matImage.at<Vec3b>(mx, my);
+			mx++;
+		}
+		my++;
+	}
+
+	ChangeTurn(turn, newPos);
+
+	DrawImage(IDC_PIC_VIEW2, m_matImage);
 }
 
 // 반환값 도통 모르겠는 부분은 일단 void로 해놨어욥
