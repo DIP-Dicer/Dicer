@@ -3,9 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-DIPTeamProject_Team5Dicer/opencv/
 opencv/
 /opencv/
+DIPTeamProject_Team5Dicer/opencv/
+DIPTeamProject_Team5Dicer/opencv
 /.vs
 .vs/
 
