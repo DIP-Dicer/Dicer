@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include <queue>
 
 using namespace cv;
 using namespace std;
@@ -54,6 +55,7 @@ public:
 	bool IsBlueCatch(int pos);
 	bool IsGreenCatch(int pos);
 	void DistributeCell(Mat m_matImage);
+	char BoardCellColor(int colornum);
 	Mat ResizeMarker(int cellsize, Mat m_matImage);
 	void UpdateBoard(Mat m_matImage);
 private:
