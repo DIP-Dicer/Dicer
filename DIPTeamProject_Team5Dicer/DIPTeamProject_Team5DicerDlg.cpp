@@ -4,12 +4,12 @@
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
 
-/*#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif*/
 #ifdef _DEBUG
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#define new DEBUG_NEW
 #endif
+/*#ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif*/
 
 
 CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=nullptr*/)
@@ -505,7 +505,7 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 		tmp.info = BoardCellColor(firstrow[i * 5+2]);
 
 		cells.push_back(tmp);
-		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n",firstrow[i*5], firstrow[i * 5+1], firstrow[i * 5+3], firstrow[i * 5+4], firstrow[i * 5 + 2]);
+		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n",firstrow[i*5], firstrow[i * 5+1], firstrow[i * 5+3], firstrow[i * 5+4], firstrow[i * 5 + 2]);
 	}
 
 	///
@@ -641,7 +641,7 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 		tmp.info = BoardCellColor(secondrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", secondrow[i * 5], secondrow[i * 5 + 1], secondrow[i * 5 + 3], secondrow[i * 5 + 4], secondrow[i * 5 + 2]);
+		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", secondrow[i * 5], secondrow[i * 5 + 1], secondrow[i * 5 + 3], secondrow[i * 5 + 4], secondrow[i * 5 + 2]);
 	}
 
 	start = false, end = false;
@@ -772,7 +772,7 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 		tmp.info = BoardCellColor(thirdrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", thirdrow[i * 5], thirdrow[i * 5 + 1], thirdrow[i * 5 + 3], thirdrow[i * 5 + 4], thirdrow[i * 5 + 2]);
+		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", thirdrow[i * 5], thirdrow[i * 5 + 1], thirdrow[i * 5 + 3], thirdrow[i * 5 + 4], thirdrow[i * 5 + 2]);
 	}
 	
 
@@ -899,7 +899,7 @@ void CDIPTeamProjectTeam5DicerDlg::DistributeCell(Mat m_matImage) { // 각 칸�
 		tmp.info = BoardCellColor(fourthrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
+		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
 	}
 
 	
