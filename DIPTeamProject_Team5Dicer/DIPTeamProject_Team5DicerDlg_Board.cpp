@@ -15,7 +15,6 @@ IMPLEMENT_DYNAMIC(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 DIPTeamProject_Team5DicerDlg_Board::DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG1_BOARD, pParent)
 {
-	//안되면 지우기
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -36,7 +35,6 @@ BEGIN_MESSAGE_MAP(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
-//안되면 지우기
 BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -78,8 +76,6 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
-		// 율아 처음에 UpdateBoard에 이거 뒀는데, 그러면 판에 말 놓을 때 마다 칸을 식별하게 되서
-		// 처음에 판 이미지 불러오고 바로 되도록!
 		DistributeCell(m_matImage2);
 
 	}

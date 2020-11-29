@@ -68,13 +68,11 @@ private:
 	int redPos = 0, bluePos = 0, greenPos = 0;
 
 protected:
-	//안되면 지우기
 	HICON m_hIcon;
 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	//여기까지
 	DECLARE_MESSAGE_MAP()
 
 public:
