@@ -307,18 +307,7 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 
 void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
 
-	//int width = m_matImage.cols;
-	//int height = m_matImage.rows;
 	int red, green, blue;
-
-	//민지 추가 - 소현아 여기에 셀 구분하는거 넣으면 되는데, header 파일에 보면 구조체있고, 그 구조체로 cells라는 변수 만들어놨거든.
-	//그거 이용해서 일단 여기에 Cell tmp; 이렇게 임시 변수 만들고
-	//tmp.min.first = 최소 x값 tmp.min.second = 최소 y값 이런식으로 최소/최대 x,y값 넣어주고
-	//cells.push_back(tmp) 이렇게 해주면 돼!
-	//구조체 내용 바꾸고 싶으면 바꿔도 됑 근데 그러면 내 부분도 바꿔야해서 말해주랏!!
-
-	//소현: 구조체내용은 그대로 유지했고 칸 순서대로 cell에 넣어뒀어! info가 의미하는 값들은 BoardCellColor 함수에 설명해뒀습니다~~!!
-
 	Mat cellImg = m_matImage.clone();
 	int width = cellImg.cols;
 	int height = cellImg.rows;
@@ -408,6 +397,9 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 	//첫번째줄(6칸) 판별하기 위한 for문1
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
+			blue = m_matImage.at<Vec3b>(x, y)[0];
+			green = m_matImage.at<Vec3b>(x, y)[1];
+			red = m_matImage.at<Vec3b>(x, y)[2];
 			if (x >= 1 && y >= 1)
 			{
 				if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x - 1, y)))
@@ -508,7 +500,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		tmp.info = BoardCellColor(firstrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n",firstrow[i*5], firstrow[i * 5+1], firstrow[i * 5+3], firstrow[i * 5+4], firstrow[i * 5 + 2]);
+		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", firstrow[i * 5], firstrow[i * 5 + 1], firstrow[i * 5 + 3], firstrow[i * 5 + 4], firstrow[i * 5 + 2]);
 	}
 
 	///
@@ -891,6 +883,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		}
 	}
 
+	//일단은 민지 연습용으로 한건데 소현이 참고하면 될듯
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -906,12 +899,13 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 	}
 
 
+
 }
 
 
 char DIPTeamProject_Team5DicerDlg_Board::BoardCellColor(int colornum) { // 칸을 나타내는 숫자가 어떤 색을 의미하는지 문자로 반환 (DistributeCell 함수에서 사용)
 
-	char color;
+	char color='a';
 
 	if (colornum == 70) //dark color(black-일반칸) -> +1
 		color = 'd';
@@ -925,7 +919,7 @@ char DIPTeamProject_Team5DicerDlg_Board::BoardCellColor(int colornum) { // 칸�
 		color = 'y';
 	else if (colornum == 238) //pink -> start&end point
 		color = 'p';
-	else if (colornum == 255) //white -> background color
+	else // if (colornum == 255) //white -> background color
 		color = 'w';
 
 	return color;
