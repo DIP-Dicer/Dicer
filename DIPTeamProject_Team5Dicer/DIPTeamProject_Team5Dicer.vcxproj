@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="DIPTeamProject_Team5Dicer.h" />
     <ClInclude Include="DIPTeamProject_Team5DicerDlg.h" />
+    <ClInclude Include="DIPTeamProject_Team5DicerDlg_Board.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -199,6 +200,7 @@
   <ItemGroup>
     <ClCompile Include="DIPTeamProject_Team5Dicer.cpp" />
     <ClCompile Include="DIPTeamProject_Team5DicerDlg.cpp" />
+    <ClCompile Include="DIPTeamProject_Team5DicerDlg_Board.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -28,6 +28,185 @@ BEGIN_MESSAGE_MAP(CDIPTeamProjectTeam5DicerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7)
+END_MESSAGE_MAP()
+
+BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	SetIcon(m_hIcon, TRUE);
+	SetIcon(m_hIcon, FALSE);
+
+	return TRUE;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::OnPaint()
+{
+	if (IsIconic())
+	{
+		CPaintDC dc(this);
+
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+		int cxIcon = GetSystemMetrics(SM_CXICON);
+		int cyIcon = GetSystemMetrics(SM_CYICON);
+		CRect rect;
+		GetClientRect(&rect);
+		int x = (rect.Width() - cxIcon + 1) / 2;
+		int y = (rect.Height() - cyIcon + 1) / 2;
+
+		dc.DrawIcon(x, y, m_hIcon);
+
+	}
+	else
+	{
+		CDialogEx::OnPaint();
+
+		//보드 이미지는 테스트 해볼라고 한 번 만들어본거니까 보드 판별하는 사람이 바꿔쥬세욥
+		/*m_matImg2 = imread("dice\\board1.jpg", -1);
+		resize(m_matImg2, m_matImage2, Size(imgSize, imgSize), 0, 0, 1);
+		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
+		DrawImage(IDC_PIC_VIEW2, m_matImage2);*/
+
+		// 율아 처음에 UpdateBoard에 이거 뒀는데, 그러면 판에 말 놓을 때 마다 칸을 식별하게 되서
+		// 처음에 판 이미지 불러오고 바로 되도록!
+		//DistributeCell(m_matImage2);
+	}
+}
+
+HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
+{
+	return static_cast<HCURSOR>(m_hIcon);
+}
+
+String CDIPTeamProjectTeam5DicerDlg::getBoardName() {
+	return boardName;
+}
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
+{
+	//m_pDIPTeamProject_Team5DicerDlg_Board = new DIPTeamProject_Team5DicerDlg_Board;
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board1.jpg";
+
+	m_board.DoModal();
+
+	//m_pDIPTeamProject_Team5DicerDlg_Board->Create(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG1_BOARD, this);
+	//m_pDIPTeamProject_Team5DicerDlg_Board->ShowWindow(SW_SHOW);
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board2.jpg";
+
+	m_board.DoModal();
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board3.jpg";
+
+	m_board.DoModal();
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board4.jpg";
+
+	m_board.DoModal();
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board5.jpg";
+
+	m_board.DoModal();
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	boardName = "dice\\board6.jpg";
+
+	m_board.DoModal();
+}
+
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7()
+{
+	DIPTeamProject_Team5DicerDlg_Board m_board;
+
+	srand(time(NULL));
+	int randNum = rand() % 6;
+
+	switch (randNum) {
+	case 0:
+		boardName = "dice\\board1.jpg";	break;
+	case 1:
+		boardName = "dice\\board2.jpg";	break;
+	case 2:
+		boardName = "dice\\board3.jpg";	break;
+	case 3:
+		boardName = "dice\\board4.jpg";	break;
+	case 4:
+		boardName = "dice\\board5.jpg";	break;
+	case 5:
+		boardName = "dice\\board6.jpg";	break;
+	}
+
+	m_board.DoModal();
+}
+
+/*#include "pch.h"
+#include "framework.h"
+#include "DIPTeamProject_Team5Dicer.h"
+#include "DIPTeamProject_Team5DicerDlg.h"
+#include "afxdialogex.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+/*#ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif*/
+
+
+//CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=nullptr*/)
+	/*: CDialogEx(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG, pParent)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+void CDIPTeamProjectTeam5DicerDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialogEx::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CDIPTeamProjectTeam5DicerDlg, CDialogEx)
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
@@ -1012,7 +1191,7 @@ void CDIPTeamProjectTeam5DicerDlg::UpdateBoard(Mat m_matImage) { // 이동할 �
 	ChangeTurn(turn, newPos);
 
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
-}
+}*/
 
 // 반환값 도통 모르겠는 부분은 일단 void로 해놨어욥
 // 엥? 이게 뭐야? 싶은 부분이 있우먄 당장 슬랙에다 서율아 멍청한 놈아~~~~~~!~!~! 이게 뭐야~~~~~~~!~! 외쳐주시길...........
