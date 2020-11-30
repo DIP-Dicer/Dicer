@@ -36,6 +36,9 @@
     <ClInclude Include="DIPTeamProject_Team5DicerDlg_Board.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MyBitmapButton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIPTeamProject_Team5Dicer.cpp">
@@ -48,6 +51,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DIPTeamProject_Team5DicerDlg_Board.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBitmapButton.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,6 +69,27 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\DIPTeamProject_Team5Dicer.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\boardbutton7.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
