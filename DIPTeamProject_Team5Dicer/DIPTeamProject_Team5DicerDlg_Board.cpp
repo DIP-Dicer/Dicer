@@ -1092,7 +1092,7 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 	int red, green, blue;
 	//Mat marker_matImage = ResizeMarker(셀크기, imread("말 이미지 파일 이름.jpg", -1)); 리사이즈된 말 이미지가 된다
 
-	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
+	/*int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
 	int originalPos = GetPosition(turn);
 
@@ -1131,17 +1131,17 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 		my++;
 	}
 
-	ChangeTurn(turn, newPos);
+	ChangeTurn(turn, newPos);*/
 
 	// 소현아 제대로 칸 식별되는건지 확인하려면 1110~1117 부분 주석 해제해서 해봥
-	/*for (int y = cells[ccc].min.second; y <= cells[ccc].max.second; y++) {
+	for (int y = cells[ccc].min.second; y <= cells[ccc].max.second; y++) {
 		for (int x = cells[ccc].min.first; x <= cells[ccc].max.first; x++) {
 			m_matImage.at<Vec3b>(x, y) = Vec3b(255, 0, 0);
 			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
 		}
 	}
 
-	ccc++;*/
+	ccc++;
 
 	/*int t = cells.size() - 1;
 
