@@ -4,12 +4,12 @@
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
 
-/*#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif*/
 #ifdef _DEBUG
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#define new DEBUG_NEW
 #endif
+/*#ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif*/
 
 
 CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=nullptr*/)
