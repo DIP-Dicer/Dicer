@@ -1,8 +1,13 @@
-﻿#include "pch.h"
+﻿// DIPTeamProject_Team5DicerDlg_Board.cpp: 구현 파일
+//
+
+#include "pch.h"
 #include "DIPTeamProject_Team5Dicer.h"
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
+#include <cstdlib>
+#include <ctime>
 
 
 // DIPTeamProject_Team5DicerDlg_Board 대화 상자
@@ -98,7 +103,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
 		DrawImage(IDC_PIC_VIEW1, m_matImage1);
-
+		
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
@@ -121,6 +126,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		}
 
 		// 현재 주사위 red (255, 80, 80) blue (78, 147, 210) green (102, 158, 64)
+		// 새 주사위 red(255, 0, 0) blue (0, 0, 255), green (0, 255, 0)
 		if (red > 150 && GetCurrentTurn() == 0)
 			break;
 		else if (blue > 150 && GetCurrentTurn() == 1)
@@ -220,6 +226,7 @@ int DIPTeamProject_Team5DicerDlg_Board::GetCurrentTurn() {
 void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(int nowTurn, int pos) {
 	switch (nowTurn) {
 	case 0:
+		redPos = pos;
 		if (IsBlueCatch(pos) || IsGreenCatch(pos)) {
 			turn = nowTurn;
 		}
@@ -228,6 +235,7 @@ void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(int nowTurn, int pos) {
 		}
 		break;
 	case 1:
+		bluePos = pos;
 		if (IsRedCatch(pos) || IsGreenCatch(pos)) {
 			turn = nowTurn;
 		}
@@ -236,6 +244,7 @@ void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(int nowTurn, int pos) {
 		}
 		break;
 	case 2:
+		greenPos = pos;
 		if (IsRedCatch(pos) || IsBlueCatch(pos)) {
 			turn = nowTurn;
 		}
@@ -249,6 +258,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동�
 
 	UpdateBoard(m_matImage2);
 }
+
 
 Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드 이미지 이진화 시켜서 네모칸 식별하기 편하게
 
@@ -273,33 +283,94 @@ Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드
 	return m_matImg;
 }
 
+
 int DIPTeamProject_Team5DicerDlg_Board::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
-	int width = m_matImage.cols;
-	int height = m_matImage.rows;
-	int color;
 	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
+	int count = 0;
 	int diceNum = 0;
 
+	Mat filter;
+	filter = imread("dice\\filter.jpg");
+	int fw = filter.cols;
+	int fh = filter.rows;
+	Mat t_matImage;
+	resize(m_matImage, t_matImage, Size(fw, fh), 0, 0, 1);
+	t_matImage = Binarization(t_matImage);
+
+	int width = t_matImage.cols;
+	int height = t_matImage.rows;
+	
+	
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			color = m_matImage.at<Vec3b>(x, y)[0];
-
-			// 주사위 눈 개수 식별
+			if (t_matImage.at<Vec3b>(x, y)[0] == 0) {
+				count = count + filter.at<Vec3b>(x, y)[0];
+			}
 		}
 	}
-
+	
+	if (count < 1300)
+		diceNum = 1;
+	else if (count < 2000)
+		diceNum = 4;
+	else if (count < 2300)
+		diceNum = 3;
+	else if (count < 2400)
+		diceNum = 5;
+	else if (count < 2600)
+		diceNum = 2;
+	else
+		diceNum = 6;
+	
 	return diceNum;
+}
+
+int DIPTeamProject_Team5DicerDlg_Board::FindSpecialPosition(int pos) {
+
+	switch (cells[pos].info) {
+	case 'g':
+		for (int i = 1; i < cells.size(); i++) {
+			if (cells[i].info == 'g' && i != pos) {
+				pos = i + 1;
+				break;
+			}
+		}
+		return pos;
+	case 'r':
+		return pos += 2;
+	case 'b':
+		return pos -= 1;
+	case 'y':
+		for (int i = 1; i < cells.size(); i++) {
+			if (cells[i].info == 'y' && i != pos) {
+				pos = i + 1;
+				break;
+			}
+		}
+		return pos;
+	}
 }
 
 int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
 
+	srand(static_cast<unsigned int>(std::time(0)));
+
+	//int tmp = rand() % 6 + 1;
+
 	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
-	int tmp = pos + pips;
 
-	// 특수 칸에 대한 계산도 추가적으로 해야함.(특수 칸 규칙 정해지면 할거임)
+	pos += pips;
 
-	return pos;
+	//pos += tmp;
+
+	if (pos >= cells.size()) {
+		return 0;
+	}else if (cells[pos].info == 'd') {
+		return pos;
+	}else {
+		return FindSpecialPosition(pos);
+	}
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
@@ -334,6 +405,9 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 
 			if ((blue + green + red) / 3 <= 70) // 검은칸
 			{
+				// 이거 매 반복문마다 호출됨 -> 나중에 수정해야 됨.
+				dark_color = Vec3b(blue, green, red);
+				
 				cellImg.at<Vec3b>(x, y)[0] = 70;
 				cellImg.at<Vec3b>(x, y)[1] = 70;
 				cellImg.at<Vec3b>(x, y)[2] = 70;
@@ -880,8 +954,6 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		}
 	}
 
-	//일단은 민지 연습용으로 한건데 소현이 참고하면 될듯
-
 	for (int i = 0; i < 6; i++)
 	{
 		Cell tmp;
@@ -895,9 +967,11 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
 	}
 
-
-
+	int size = cells[0].max.first - cells[0].min.first + 1;
+	CreateMarker(size);
 }
+
+
 
 
 char DIPTeamProject_Team5DicerDlg_Board::BoardCellColor(int colornum) { // 칸을 나타내는 숫자가 어떤 색을 의미하는지 문자로 반환 (DistributeCell 함수에서 사용)
@@ -916,7 +990,7 @@ char DIPTeamProject_Team5DicerDlg_Board::BoardCellColor(int colornum) { // 칸�
 		color = 'y';
 	else if (colornum == 238) //pink -> start&end point
 		color = 'p';
-	else // if (colornum == 255) //white -> background color
+	else // if (colornum == 255) //white -> background color 
 		color = 'w';
 
 	return color;
@@ -933,6 +1007,23 @@ Mat DIPTeamProject_Team5DicerDlg_Board::ResizeMarker(int cellsize, Mat m_matImag
 	return m_matImageTemp;
 }
 
+void DIPTeamProject_Team5DicerDlg_Board::CreateMarker(int size) {
+	redMarker = ResizeMarker(size, imread("dice\\r_marker.jpg", -1));
+	blueMarker = ResizeMarker(size, imread("dice\\b_marker.jpg", -1));
+	greenMarker = ResizeMarker(size, imread("dice\\g_marker.jpg", -1));
+}
+
+Mat DIPTeamProject_Team5DicerDlg_Board::GetMarker(int turn) {
+	switch (turn) {
+	case 0:
+		return redMarker;
+	case 1:
+		return blueMarker;
+	case 2:
+		return greenMarker;
+	}
+}
+
 int DIPTeamProject_Team5DicerDlg_Board::GetPosition(int turn) {
 	switch (turn) {
 	case 0:
@@ -947,7 +1038,7 @@ int DIPTeamProject_Team5DicerDlg_Board::GetPosition(int turn) {
 // 잡았을 때 무슨 말이 잡혔습니다! 이런거 나오면 좋을 듯.
 bool DIPTeamProject_Team5DicerDlg_Board::IsRedCatch(int pos) {
 	if (redPos == pos) {
-		redPos = 0;
+		redPos = -1;
 		return true;
 	}
 	return false;
@@ -955,7 +1046,7 @@ bool DIPTeamProject_Team5DicerDlg_Board::IsRedCatch(int pos) {
 
 bool DIPTeamProject_Team5DicerDlg_Board::IsBlueCatch(int pos) {
 	if (bluePos == pos) {
-		bluePos = 0;
+		bluePos = -1;
 		return true;
 	}
 	return false;
@@ -963,10 +1054,35 @@ bool DIPTeamProject_Team5DicerDlg_Board::IsBlueCatch(int pos) {
 
 bool DIPTeamProject_Team5DicerDlg_Board::IsGreenCatch(int pos) {
 	if (greenPos == pos) {
-		greenPos = 0;
+		greenPos = -1;
 		return true;
 	}
 	return false;
+}
+
+void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(Mat m_matImage, int turn) {
+
+	Mat color;
+
+	switch (turn) {
+	case 0:
+		color = Vec3b(0, 0, 255);
+		break;
+	case 1:
+		color = Vec3b(0,255, 0);
+		break;
+	case 2:
+		color = Vec3b(255, 0, 0);
+		break;
+	}
+
+	for (int y = 100; y <= 200; y++) {
+		for (int x = 100; x <= 200; x++) {
+			m_matImage.at<Vec3b>(x, y) = color;
+		}
+	}
+
+	DrawImage(IDC_PIC_VIEW2, m_matImage);
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
@@ -980,30 +1096,66 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 
 	int originalPos = GetPosition(turn);
 
-	// 원래 말 있던 곳 되돌림. 검은색으로
-	for (int y = cells[originalPos].min.second; y <= cells[originalPos].max.second; y++) {
-		for (int x = cells[originalPos].min.first; x <= cells[originalPos].max.first; x++) {
-			m_matImage.at<Vec3b>(x, y) = (0, 0, 0);
+	// 시작점에서 출발하는거니까 일단 0으로
+	if (originalPos == -1) {
+		originalPos = 0;
+	}
+	else {
+		// 원래 말 있던 곳 되돌림. 검은색으로
+		for (int y = cells[originalPos].min.second; y <= cells[originalPos].max.second; y++) {
+			for (int x = cells[originalPos].min.first; x <= cells[originalPos].max.first; x++) {
+				m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+			}
 		}
 	}
 
-	int newPos = CalculatePosition(turn); // 이동할 위치 정보 가져옴
+	int newPos = CalculatePosition(originalPos); // 이동할 위치 정보 가져옴
 
-	int size = cells[newPos].max.first - cells[newPos].min.first + 1;
-	Mat marker_matImage = ResizeMarker(size, imread("dice\\red_1.jpg", -1)); // 이 부분도 보드 게임 칸 크기가 다 같다면 매번 여기서 말고 다른데서 한번만 해도 될듓
+	if (newPos == 0) {
+		// 게임 끝난거에 대한거 추가.
+		// 윗부분 제대로 안되어 있어서 런타임 에러 발생함.
+		ShowWinner(m_matImage, turn);
+		return;
+	}
+
+	Mat marker = GetMarker(turn);
 
 	int my = 0;
 	int mx = 0;
 	for (int y = cells[newPos].min.second; y <= cells[newPos].max.second; y++) {
 		mx = 0;
 		for (int x = cells[newPos].min.first; x <= cells[newPos].max.first; x++) {
-			m_matImage.at<Vec3b>(x, y) = marker_matImage.at<Vec3b>(mx, my);
+			m_matImage.at<Vec3b>(x, y) = marker.at<Vec3b>(mx, my);
 			mx++;
 		}
 		my++;
 	}
 
 	ChangeTurn(turn, newPos);
+
+	// 소현아 제대로 칸 식별되는건지 확인하려면 1110~1117 부분 주석 해제해서 해봥
+	/*for (int y = cells[ccc].min.second; y <= cells[ccc].max.second; y++) {
+		for (int x = cells[ccc].min.first; x <= cells[ccc].max.first; x++) {
+			m_matImage.at<Vec3b>(x, y) = Vec3b(255, 0, 0);
+			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+		}
+	}
+
+	ccc++;*/
+
+	/*int t = cells.size() - 1;
+
+	for (int y = cells[t].min.second; y <= cells[t].max.second; y++) {
+		for (int x = cells[t].min.first; x <= cells[t].max.first; x++) {
+			m_matImage.at<Vec3b>(x, y) = (0, 0, 255);
+		}
+	}*/
+
+	/*for (int y = 100; y <= 200; y++) {
+		for (int x = 100; x <= 200; x++) {
+			m_matImage.at<Vec3b>(x, y) = (0, 0, 255);
+		}
+	}*/
 
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
 }
