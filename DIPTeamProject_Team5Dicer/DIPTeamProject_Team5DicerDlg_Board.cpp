@@ -1,4 +1,7 @@
-﻿#include "pch.h"
+﻿// DIPTeamProject_Team5DicerDlg_Board.cpp: 구현 파일
+//
+
+#include "pch.h"
 #include "DIPTeamProject_Team5Dicer.h"
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
@@ -121,6 +124,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		}
 
 		// 현재 주사위 red (255, 80, 80) blue (78, 147, 210) green (102, 158, 64)
+		// 새 주사위 red(255, 0, 0) blue (0, 0, 255), green (0, 255, 0)
 		if (red > 150 && GetCurrentTurn() == 0)
 			break;
 		else if (blue > 150 && GetCurrentTurn() == 1)
