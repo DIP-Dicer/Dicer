@@ -389,6 +389,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 	bool start = false, end = false;
 	int left, right, top, bottom;
 	int index = 0;
+	int count = 0;
 	int firstrow[30] = { 0, };
 	int secondrow[35] = { 0, };
 	int thirdrow[25] = { 0, };
@@ -571,7 +572,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		tmp.info = BoardCellColor(firstrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", firstrow[i * 5], firstrow[i * 5 + 1], firstrow[i * 5 + 3], firstrow[i * 5 + 4], firstrow[i * 5 + 2]);
+		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", firstrow[i * 5], firstrow[i * 5 + 1], firstrow[i * 5 + 3], firstrow[i * 5 + 4], firstrow[i * 5 + 2]);
 	}
 
 	///
@@ -707,7 +708,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		tmp.info = BoardCellColor(secondrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", secondrow[i * 5], secondrow[i * 5 + 1], secondrow[i * 5 + 3], secondrow[i * 5 + 4], secondrow[i * 5 + 2]);
+		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", secondrow[i * 5], secondrow[i * 5 + 1], secondrow[i * 5 + 3], secondrow[i * 5 + 4], secondrow[i * 5 + 2]);
 	}
 
 	start = false, end = false;
@@ -838,7 +839,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		tmp.info = BoardCellColor(thirdrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", thirdrow[i * 5], thirdrow[i * 5 + 1], thirdrow[i * 5 + 3], thirdrow[i * 5 + 4], thirdrow[i * 5 + 2]);
+		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", thirdrow[i * 5], thirdrow[i * 5 + 1], thirdrow[i * 5 + 3], thirdrow[i * 5 + 4], thirdrow[i * 5 + 2]);
 	}
 
 
@@ -866,6 +867,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			{
 				change4[x]++;
 			}
+			
 		}
 	}
 
@@ -880,15 +882,19 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 				start = true;
 				bottom = x;
 				for (int y = thirdrow[21] - 1; y > firstrow[4] + 1; y--) {
-					if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x, y + 1)))
+					if (count < 12)
 					{
-						changePos.push(x);
-						changePos.push(y);
-						changePos.push(cellImg.at<Vec3b>(x, y)[0]);
+						if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x, y + 1)))
+						{
+							changePos.push(x);
+							changePos.push(y);
+							changePos.push(cellImg.at<Vec3b>(x, y)[0]);
+							count++;
+						}
 					}
 				}
 			}
-		if (change4[x] == 0 && start == true)
+		if (change4[x] == 0 && start == true) //여기서 저장되는 4번째줄 ymin값이 잘못됨
 			if (end == false)
 			{
 				end = true;
@@ -909,7 +915,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 
 	//4번째줄(5칸) 칸 최소,최대 좌표 저장하는 for문3
 	index = 0;
-	for (int i = 0; i < change4[top]; i++)
+	for (int i = 0; i < change4[bottom]; i++)
 	{
 		if (i % 2 == 1 && changePos.front())
 		{
@@ -920,7 +926,6 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			changePos.pop();
 			fourthrow[index * 5 + 2] = changePos.front(); //color
 			changePos.pop();
-
 			index++;
 		}
 		else if (i % 2 == 0 && changePos.front())
@@ -930,13 +935,10 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			changePos.pop();
 		}
 	}
-	changePos.pop();
-	changePos.pop();
-	changePos.pop();
 	index = 0;
-	for (int i = 0; i < change4[bottom]; i++)
+	for (int i = 0; i < change4[top]; i++)
 	{
-		if (i % 2 == 0 && changePos.front())
+		if (i % 2 == 1 && changePos.front())
 		{
 			fourthrow[index * 5] = changePos.front(); //x-max
 			changePos.pop();
@@ -946,7 +948,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 
 			index++;
 		}
-		else if (i % 2 == 1 && changePos.front())
+		else if (i % 2 == 0 && changePos.front())
 		{
 			changePos.pop();
 			changePos.pop();
@@ -964,7 +966,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		tmp.info = BoardCellColor(fourthrow[i * 5 + 2]);
 
 		cells.push_back(tmp);
-		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
+		printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
 	}
 
 	int size = cells[0].max.first - cells[0].min.first + 1;
