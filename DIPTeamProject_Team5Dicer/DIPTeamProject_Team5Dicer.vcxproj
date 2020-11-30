@@ -193,6 +193,7 @@
     <ClInclude Include="DIPTeamProject_Team5DicerDlg.h" />
     <ClInclude Include="DIPTeamProject_Team5DicerDlg_Board.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="MyBitmapButton.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="DIPTeamProject_Team5Dicer.cpp" />
     <ClCompile Include="DIPTeamProject_Team5DicerDlg.cpp" />
     <ClCompile Include="DIPTeamProject_Team5DicerDlg_Board.cpp" />
+    <ClCompile Include="MyBitmapButton.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -215,6 +217,13 @@
     <None Include="res\DIPTeamProjectTeam5Dicer.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="dice\boardbutton1.bmp" />
+    <Image Include="dice\boardbutton2.bmp" />
+    <Image Include="dice\boardbutton3.bmp" />
+    <Image Include="dice\boardbutton4.bmp" />
+    <Image Include="dice\boardbutton5.bmp" />
+    <Image Include="dice\boardbutton6.bmp" />
+    <Image Include="dice\boardbutton7.bmp" />
     <Image Include="res\DIPTeamProject_Team5Dicer.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

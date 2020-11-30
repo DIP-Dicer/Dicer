@@ -21,6 +21,13 @@ CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=null
 void CDIPTeamProjectTeam5DicerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON1, boardbutton1);
+	DDX_Control(pDX, IDC_BUTTON2, boardbutton2);
+	DDX_Control(pDX, IDC_BUTTON3, boardbutton3);
+	DDX_Control(pDX, IDC_BUTTON4, boardbutton4);
+	DDX_Control(pDX, IDC_BUTTON5, boardbutton5);
+	DDX_Control(pDX, IDC_BUTTON6, boardbutton6);
+	DDX_Control(pDX, IDC_BUTTON7, boardbutton7);
 }
 
 BEGIN_MESSAGE_MAP(CDIPTeamProjectTeam5DicerDlg, CDialogEx)
@@ -38,6 +45,14 @@ END_MESSAGE_MAP()
 BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+
+	boardbutton1.LoadBitmaps(IDB_BITMAP1, NULL, NULL, NULL);
+	boardbutton2.LoadBitmaps(IDB_BITMAP2, NULL, NULL, NULL);
+	boardbutton3.LoadBitmaps(IDB_BITMAP3, NULL, NULL, NULL);
+	boardbutton4.LoadBitmaps(IDB_BITMAP4, NULL, NULL, NULL);
+	boardbutton5.LoadBitmaps(IDB_BITMAP5, NULL, NULL, NULL);
+	boardbutton6.LoadBitmaps(IDB_BITMAP6, NULL, NULL, NULL);
+	boardbutton7.LoadBitmaps(IDB_BITMAP7, NULL, NULL, NULL);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);

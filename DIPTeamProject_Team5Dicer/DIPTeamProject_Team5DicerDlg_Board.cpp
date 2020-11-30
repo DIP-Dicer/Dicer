@@ -1,7 +1,4 @@
-﻿// DIPTeamProject_Team5DicerDlg_Board.cpp: 구현 파일
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "DIPTeamProject_Team5Dicer.h"
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
@@ -103,7 +100,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
 		DrawImage(IDC_PIC_VIEW1, m_matImage1);
-
+		
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
@@ -258,6 +255,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동�
 	UpdateBoard(m_matImage2);
 }
 
+
 Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드 이미지 이진화 시켜서 네모칸 식별하기 편하게
 
 	int width = m_matImage.cols;
@@ -281,22 +279,46 @@ Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드
 	return m_matImg;
 }
 
+
 int DIPTeamProject_Team5DicerDlg_Board::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
-	int width = m_matImage.cols;
-	int height = m_matImage.rows;
-	int color;
 	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
+	int count = 0;
 	int diceNum = 0;
 
+	Mat filter;
+	filter = imread("dice\\filter.jpg");
+	int fw = filter.cols;
+	int fh = filter.rows;
+	Mat t_matImage;
+	resize(m_matImage, t_matImage, Size(fw, fh), 0, 0, 1);
+	t_matImage = Binarization(t_matImage);
+
+	int width = t_matImage.cols;
+	int height = t_matImage.rows;
+	
+	
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			color = m_matImage.at<Vec3b>(x, y)[0];
-
-			// 주사위 눈 개수 식별
+			if (t_matImage.at<Vec3b>(x, y)[0] == 0) {
+				count = count + filter.at<Vec3b>(x, y)[0];
+			}
 		}
 	}
-
+	
+	if (count < 1300)
+		diceNum = 1;
+	else if (count < 2000)
+		diceNum = 4;
+	else if (count < 2300)
+		diceNum = 3;
+	else if (count < 2400)
+		diceNum = 5;
+	else if (count < 2600)
+		diceNum = 2;
+	else
+		diceNum = 6;
+	
 	return diceNum;
 }
 
