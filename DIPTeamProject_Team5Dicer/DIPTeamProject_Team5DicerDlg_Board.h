@@ -60,6 +60,7 @@ public:
 	bool IsBlueCatch(int pos);
 	bool IsGreenCatch(int pos);
 	void DistributeCell(Mat m_matImage);
+	void BoardSimplication(Mat m_matImage);
 	void CreateMarker(int size);
 	void ShowWinner(Mat m_matImage, int turn);
 	Mat GetMarker(int turn);

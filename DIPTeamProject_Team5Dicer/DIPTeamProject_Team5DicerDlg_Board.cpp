@@ -78,7 +78,8 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
-		DistributeCell(m_matImage2);
+		BoardSimplication(m_matImage2);
+		//DistributeCell(m_matImage2);
 
 	}
 }
@@ -372,28 +373,11 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 		return FindSpecialPosition(pos);
 	}
 }
-
-void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
-
-	int red, green, blue;
+void DIPTeamProject_Team5DicerDlg_Board::BoardSimplication(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
 	Mat cellImg = m_matImage.clone();
+	int red, green, blue;
 	int width = cellImg.cols;
 	int height = cellImg.rows;
-	//printf("height: %d | width: %d\n", height, width);
-	int change[400] = { 0, };
-	int change2[400] = { 0, };
-	int change3[400] = { 0, };
-	int change4[400] = { 0, };
-
-	queue<int> changePos;
-	bool start = false, end = false;
-	int left, right, top, bottom;
-	int index = 0;
-	int firstrow[30] = { 0, };
-	int secondrow[35] = { 0, };
-	int thirdrow[25] = { 0, };
-	int fourthrow[30] = { 0, };
-
 
 	//픽셀값 정규화하는 for문
 	for (int y = 0; y < height; y++) {
@@ -407,7 +391,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			{
 				// 이거 매 반복문마다 호출됨 -> 나중에 수정해야 됨.
 				dark_color = Vec3b(blue, green, red);
-				
+
 				cellImg.at<Vec3b>(x, y)[0] = 70;
 				cellImg.at<Vec3b>(x, y)[1] = 70;
 				cellImg.at<Vec3b>(x, y)[2] = 70;
@@ -463,14 +447,38 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 		}
 	}
 
+	DistributeCell(cellImg);
+}
+
+void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat cellImg) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
+
+	int red, green, blue;
+	//Mat cellImg = m_matImage.clone();
+	int width = cellImg.cols;
+	int height = cellImg.rows;
+	//printf("height: %d | width: %d\n", height, width);
+	int change[400] = { 0, };
+	int change2[400] = { 0, };
+	int change3[400] = { 0, };
+	int change4[400] = { 0, };
+
+	queue<int> changePos;
+	bool start = false, end = false;
+	int left, right, top, bottom;
+	int index = 0;
+	int count = 0;
+	int firstrow[30] = { 0, };
+	int secondrow[35] = { 0, };
+	int thirdrow[25] = { 0, };
+	int fourthrow[30] = { 0, };
 
 
 	//첫번째줄(6칸) 판별하기 위한 for문1
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			blue = m_matImage.at<Vec3b>(x, y)[0];
-			green = m_matImage.at<Vec3b>(x, y)[1];
-			red = m_matImage.at<Vec3b>(x, y)[2];
+			blue = cellImg.at<Vec3b>(x, y)[0];
+			green = cellImg.at<Vec3b>(x, y)[1];
+			red = cellImg.at<Vec3b>(x, y)[2];
 			if (x >= 1 && y >= 1)
 			{
 				if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x - 1, y)))
@@ -866,6 +874,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			{
 				change4[x]++;
 			}
+			
 		}
 	}
 
@@ -880,15 +889,19 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 				start = true;
 				bottom = x;
 				for (int y = thirdrow[21] - 1; y > firstrow[4] + 1; y--) {
-					if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x, y + 1)))
+					if (count < 12)
 					{
-						changePos.push(x);
-						changePos.push(y);
-						changePos.push(cellImg.at<Vec3b>(x, y)[0]);
+						if ((cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x, y + 1)))
+						{
+							changePos.push(x);
+							changePos.push(y);
+							changePos.push(cellImg.at<Vec3b>(x, y)[0]);
+							count++;
+						}
 					}
 				}
 			}
-		if (change4[x] == 0 && start == true)
+		if (change4[x] == 0 && start == true) //여기서 저장되는 4번째줄 ymin값이 잘못됨
 			if (end == false)
 			{
 				end = true;
@@ -909,7 +922,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 
 	//4번째줄(5칸) 칸 최소,최대 좌표 저장하는 for문3
 	index = 0;
-	for (int i = 0; i < change4[top]; i++)
+	for (int i = 0; i < change4[bottom]; i++)
 	{
 		if (i % 2 == 1 && changePos.front())
 		{
@@ -920,7 +933,6 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			changePos.pop();
 			fourthrow[index * 5 + 2] = changePos.front(); //color
 			changePos.pop();
-
 			index++;
 		}
 		else if (i % 2 == 0 && changePos.front())
@@ -930,13 +942,10 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 			changePos.pop();
 		}
 	}
-	changePos.pop();
-	changePos.pop();
-	changePos.pop();
 	index = 0;
-	for (int i = 0; i < change4[bottom]; i++)
+	for (int i = 0; i < change4[top]; i++)
 	{
-		if (i % 2 == 0 && changePos.front())
+		if (i % 2 == 1 && changePos.front())
 		{
 			fourthrow[index * 5] = changePos.front(); //x-max
 			changePos.pop();
@@ -946,7 +955,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) { // 각
 
 			index++;
 		}
-		else if (i % 2 == 1 && changePos.front())
+		else if (i % 2 == 0 && changePos.front())
 		{
 			changePos.pop();
 			changePos.pop();
