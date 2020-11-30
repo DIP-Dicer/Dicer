@@ -356,16 +356,17 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 
 	srand(static_cast<unsigned int>(std::time(0)));
 
-	int tmp = rand() % 6 + 1;
+	//int tmp = rand() % 6 + 1;
 
-	//int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
-	//int tmp = pos + pips;
+	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
 
-	pos += tmp;
+	pos += pips;
+
+	//pos += tmp;
 
 	if (pos >= cells.size()) {
 		return 0;
-	}else if (cells[tmp].info == 'd') {
+	}else if (cells[pos].info == 'd') {
 		return pos;
 	}else {
 		return FindSpecialPosition(pos);
@@ -1007,9 +1008,9 @@ Mat DIPTeamProject_Team5DicerDlg_Board::ResizeMarker(int cellsize, Mat m_matImag
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::CreateMarker(int size) {
-	redMarker = ResizeMarker(size, imread("dice\\red_1.jpg", -1));
-	blueMarker = ResizeMarker(size, imread("dice\\blue_1.jpg", -1));
-	greenMarker = ResizeMarker(size, imread("dice\\green_1.jpg", -1));
+	redMarker = ResizeMarker(size, imread("dice\\r_marker.jpg", -1));
+	blueMarker = ResizeMarker(size, imread("dice\\b_marker.jpg", -1));
+	greenMarker = ResizeMarker(size, imread("dice\\g_marker.jpg", -1));
 }
 
 Mat DIPTeamProject_Team5DicerDlg_Board::GetMarker(int turn) {
