@@ -13,13 +13,9 @@
 using namespace cv;
 using namespace std;
 
-// 민지 추가 - 소현이가 이용해야함.
 struct cell {
-	//cell을 구성하는 최소 x,y
 	pair<int, int> min;
-	//cell을 구성하는 최대 x,y
 	pair<int, int> max;
-	//cell정보(자료형 뭘로 할지 고민하다가 일단 char로 했는데 뭐 int 해도 되고..원하는걸로? 소현 결정하면 말 해주랏!)
 	char info;
 }typedef Cell;
 
@@ -40,11 +36,14 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 public:
-	vector<Cell> cells; // (민지추가) - 소현이가 이용해야함.
+	vector<Cell> cells; // 보드 위의 각 cell의 위치 정보, 특수 칸 정보가 담겨 있음.
 	Mat m_matImg1, m_matImg2, m_matImage1, m_matImage2; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
 	BITMAPINFO* m_pBitmapInfo;
 	int imgSize = 400;
 	String boardFile;
+	Vec3b dark_color;
+	//확인용변수
+	int ccc = 0;
 
 	void CreateBitmapInfo(int width, int height);
 	void DrawImage(int id, Mat m_matImage);
@@ -54,18 +53,23 @@ public:
 	void ChangeTurn(int turn, int pos);
 	Mat Binarization(Mat m_matImage);
 	int RecognizeDiceNum(Mat m_matImage);
+	int FindSpecialPosition(int pos);
 	int CalculatePosition(int pos);
 	int GetPosition(int turn);
 	bool IsRedCatch(int pos);
 	bool IsBlueCatch(int pos);
 	bool IsGreenCatch(int pos);
 	void DistributeCell(Mat m_matImage);
+	void CreateMarker(int size);
+	void ShowWinner(Mat m_matImage, int turn);
+	Mat GetMarker(int turn);
 	char BoardCellColor(int colornum);
 	Mat ResizeMarker(int cellsize, Mat m_matImage);
 	void UpdateBoard(Mat m_matImage);
 private:
 	int turn = 0; // turn은 현재 순서인 팀
-	int redPos = 0, bluePos = 0, greenPos = 0;
+	int redPos = -1, bluePos = -1, greenPos = -1;
+	Mat redMarker, blueMarker, greenMarker;
 
 protected:
 	HICON m_hIcon;
