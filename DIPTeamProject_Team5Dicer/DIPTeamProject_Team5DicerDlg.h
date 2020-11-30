@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
+#include "MyBitmapButton.h"
 
 using namespace cv;
 using namespace std;
@@ -46,4 +47,11 @@ public:
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedButton6();
 	afx_msg void OnBnClickedButton7();
+	CMyBitmapButton boardbutton1;
+	CMyBitmapButton boardbutton2;
+	CMyBitmapButton boardbutton3;
+	CMyBitmapButton boardbutton4;
+	CMyBitmapButton boardbutton5;
+	CMyBitmapButton boardbutton6;
+	CBitmapButton boardbutton7;
 };

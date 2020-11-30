@@ -1,7 +1,4 @@
-﻿// DIPTeamProject_Team5DicerDlg_Board.cpp: 구현 파일
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "DIPTeamProject_Team5Dicer.h"
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
