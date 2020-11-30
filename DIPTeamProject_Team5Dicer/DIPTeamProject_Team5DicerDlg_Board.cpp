@@ -356,10 +356,10 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 
 	srand(static_cast<unsigned int>(std::time(0)));
 
-	int tmp = rand() % 6 + 1;
+	//int tmp = rand() % 6 + 1;
 
-	//int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
-	//int tmp = pos + pips;
+	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
+	int tmp = pos + pips;
 
 	pos += tmp;
 
