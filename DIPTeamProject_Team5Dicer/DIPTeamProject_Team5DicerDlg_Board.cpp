@@ -6,8 +6,8 @@
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
-#include <cstdlib>
-#include <ctime>
+/*#include <cstdlib>
+#include <ctime>*/
 
 
 // DIPTeamProject_Team5DicerDlg_Board 대화 상자
@@ -78,9 +78,9 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
-		BoardSimplication(m_matImage2);
+		//BoardSimplication(m_matImage2);
 		//DistributeCell(m_matImage2);
-
+		DistributeCellTest(m_matImage2);
 	}
 }
 
@@ -108,6 +108,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
+		// 여긴 일단 안건드림.
 		for (int y = 0; y < width; y++) {
 			for (int x = 0; x < height; x++) {
 				blue = m_matImage1.at<Vec3b>(x, y)[0];
@@ -220,7 +221,6 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawImage(int id, Mat m_matImage) { // 
 }
 
 int DIPTeamProject_Team5DicerDlg_Board::GetCurrentTurn() {
-
 	return turn;
 }
 
@@ -281,10 +281,25 @@ Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드
 				m_matImg.at<Vec3b>(x, y) = Vec3b(0, 0, 0);
 		}
 	}
+
+
+	/*for (int r = 0; r < height;r++) {
+		for (int c = 0; c < width; c++) {
+			blue = m_matImage.at<Vec3b>(r, c)[0];
+			green = m_matImage.at<Vec3b>(r, c)[1];
+			red = m_matImage.at<Vec3b>(r, c)[2];
+			color = (blue + green + red) / 3;
+
+			if (color > 180)
+				m_matImg.at<Vec3b>(r, c) = Vec3b(255, 255, 255);
+			else
+				m_matImg.at<Vec3b>(r, c) = Vec3b(0, 0, 0);
+		}
+	}*/
 	return m_matImg;
 }
 
-
+// 여기도 일단 안바꿈.
 int DIPTeamProject_Team5DicerDlg_Board::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
 	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
@@ -331,7 +346,7 @@ int DIPTeamProject_Team5DicerDlg_Board::FindSpecialPosition(int pos) {
 
 	switch (cells[pos].info) {
 	case 'g':
-		for (int i = 1; i < cells.size(); i++) {
+		for (int i = 1; i < cells.size()-1; i++) {
 			if (cells[i].info == 'g' && i != pos) {
 				pos = i + 1;
 				break;
@@ -343,7 +358,7 @@ int DIPTeamProject_Team5DicerDlg_Board::FindSpecialPosition(int pos) {
 	case 'b':
 		return pos -= 1;
 	case 'y':
-		for (int i = 1; i < cells.size(); i++) {
+		for (int i = 1; i < cells.size()-1; i++) {
 			if (cells[i].info == 'y' && i != pos) {
 				pos = i + 1;
 				break;
@@ -355,15 +370,15 @@ int DIPTeamProject_Team5DicerDlg_Board::FindSpecialPosition(int pos) {
 
 int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
 
-	srand(static_cast<unsigned int>(std::time(0)));
-
+	//srand(static_cast<unsigned int>(std::time(0)));
+	//int tmp = pos + pips;
 	//int tmp = rand() % 6 + 1;
 
+	//어차피 근데 RecognizeDiceNum에서 binarization 하는거 아닌가?
 	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
 
-	pos += pips;
-
 	//pos += tmp;
+	pos += pips;
 
 	if (pos >= cells.size()) {
 		return 0;
@@ -371,6 +386,7 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 		return pos;
 	}else {
 		return FindSpecialPosition(pos);
+		//return pos;
 	}
 }
 void DIPTeamProject_Team5DicerDlg_Board::BoardSimplication(Mat m_matImage) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
@@ -380,66 +396,72 @@ void DIPTeamProject_Team5DicerDlg_Board::BoardSimplication(Mat m_matImage) { // 
 	int height = cellImg.rows;
 
 	//픽셀값 정규화하는 for문
-	for (int y = 0; y < height; y++) {
-
-		for (int x = 0; x < width; x++) {
-			blue = cellImg.at<Vec3b>(x, y)[0];
-			green = cellImg.at<Vec3b>(x, y)[1];
-			red = cellImg.at<Vec3b>(x, y)[2];
+	for (int r = 0; r < height; r++) {
+		for (int c = 0; c < width; c++) {
+			blue = cellImg.at<Vec3b>(r, c)[0];
+			green = cellImg.at<Vec3b>(r, c)[1];
+			red = cellImg.at<Vec3b>(r, c)[2];
 
 			if ((blue + green + red) / 3 <= 70) // 검은칸
 			{
 				// 이거 매 반복문마다 호출됨 -> 나중에 수정해야 됨.
 				dark_color = Vec3b(blue, green, red);
 
-				cellImg.at<Vec3b>(x, y)[0] = 70;
-				cellImg.at<Vec3b>(x, y)[1] = 70;
-				cellImg.at<Vec3b>(x, y)[2] = 70;
+				cellImg.at<Vec3b>(r, c)[0] = 70;
+				cellImg.at<Vec3b>(r, c)[1] = 70;
+				cellImg.at<Vec3b>(r, c)[2] = 70;
 			}
 			else if (((blue + green + red) / 3 > 70) && ((blue + green + red) / 3 <= 100)) //초록색칸
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 100;
-				cellImg.at<Vec3b>(x, y)[1] = 100;
-				cellImg.at<Vec3b>(x, y)[2] = 100;
+				cellImg.at<Vec3b>(r, c)[0] = 100;
+				cellImg.at<Vec3b>(r, c)[1] = 100;
+				cellImg.at<Vec3b>(r, c)[2] = 100;
 			}
 			else if (((blue + green + red) / 3 > 100) && ((blue + green + red) / 3 <= 140)) //빨간색칸
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 140;
-				cellImg.at<Vec3b>(x, y)[1] = 140;
-				cellImg.at<Vec3b>(x, y)[2] = 140;
+				cellImg.at<Vec3b>(r, c)[0] = 140;
+				cellImg.at<Vec3b>(r, c)[1] = 140;
+				cellImg.at<Vec3b>(r, c)[2] = 140;
 			}
 			else if (((blue + green + red) / 3 > 140) && ((blue + green + red) / 3 <= 180)) //파란색칸
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 180;
-				cellImg.at<Vec3b>(x, y)[1] = 180;
-				cellImg.at<Vec3b>(x, y)[2] = 180;
+				cellImg.at<Vec3b>(r, c)[0] = 180;
+				cellImg.at<Vec3b>(r, c)[1] = 180;
+				cellImg.at<Vec3b>(r, c)[2] = 180;
 			}
 			else if (((blue + green + red) / 3 > 180) && ((blue + green + red) / 3 <= 215)) //노란색칸
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 215;
-				cellImg.at<Vec3b>(x, y)[1] = 215;
-				cellImg.at<Vec3b>(x, y)[2] = 215;
+				cellImg.at<Vec3b>(r, c)[0] = 215;
+				cellImg.at<Vec3b>(r, c)[1] = 215;
+				cellImg.at<Vec3b>(r, c)[2] = 215;
 			}
 			else if (((blue + green + red) / 3 > 215) && ((blue + green + red) / 3 <= 238)) //분홍색칸
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 238;
-				cellImg.at<Vec3b>(x, y)[1] = 238;
-				cellImg.at<Vec3b>(x, y)[2] = 238;
+				cellImg.at<Vec3b>(r, c)[0] = 238;
+				cellImg.at<Vec3b>(r, c)[1] = 238;
+				cellImg.at<Vec3b>(r, c)[2] = 238;
 			}
 			else //배경색(연회색)
 			{
-				cellImg.at<Vec3b>(x, y)[0] = 255;
-				cellImg.at<Vec3b>(x, y)[1] = 255;
-				cellImg.at<Vec3b>(x, y)[2] = 255;
+				cellImg.at<Vec3b>(r, c)[0] = 255;
+				cellImg.at<Vec3b>(r, c)[1] = 255;
+				cellImg.at<Vec3b>(r, c)[2] = 255;
 			}
 
-			if (x >= 2 && y >= 2) //하나 다른 픽셀 값들 일반화
+			if (r >= 2 && c >= 2) //하나 다른 픽셀 값들 일반화
 			{
-				if ((cellImg.at<Vec3b>(x - 2, y) != cellImg.at<Vec3b>(x - 1, y)) && (cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x - 1, y)))
+				/*if ((cellImg.at<Vec3b>(x - 2, y) != cellImg.at<Vec3b>(x - 1, y)) && (cellImg.at<Vec3b>(x, y) != cellImg.at<Vec3b>(x - 1, y)))
 				{
 					cellImg.at<Vec3b>(x - 1, y)[0] = cellImg.at<Vec3b>(x, y)[0];
 					cellImg.at<Vec3b>(x - 1, y)[1] = cellImg.at<Vec3b>(x, y)[1];
 					cellImg.at<Vec3b>(x - 1, y)[2] = cellImg.at<Vec3b>(x, y)[2];
+				}*/
+
+				if ((cellImg.at<Vec3b>(r, c-2) != cellImg.at<Vec3b>(r, c-1)) && (cellImg.at<Vec3b>(r, c) != cellImg.at<Vec3b>(r, c-1)))
+				{
+					cellImg.at<Vec3b>(r, c-1)[0] = cellImg.at<Vec3b>(r, c)[0];
+					cellImg.at<Vec3b>(r,c-1)[1] = cellImg.at<Vec3b>(r, c)[1];
+					cellImg.at<Vec3b>(r, c-1)[2] = cellImg.at<Vec3b>(r, c)[2];
 				}
 			}
 
@@ -447,8 +469,224 @@ void DIPTeamProject_Team5DicerDlg_Board::BoardSimplication(Mat m_matImage) { // 
 		}
 	}
 
-	DistributeCell(cellImg);
+	//DistributeCell(cellImg);
+	
 }
+
+void DIPTeamProject_Team5DicerDlg_Board::FindCellBound(int i, int j, Mat m_matImage) {
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+
+	int minR = i, minC = j, maxR = i, maxC = j;
+
+	queue < pair<int, int>> q;
+	visit[i][j] = cellNum;
+	q.push(make_pair(i, j));
+
+	while (!q.empty()) {
+		int currentRow = q.front().first;
+		int currentColumn = q.front().second;
+
+		for (int k = 0; k < 4; k++) {
+			int nextRow = currentRow + dy[k];
+			int nextColumn = currentColumn + dx[k];
+
+			
+			if ((0 <= nextRow && nextRow < height) && (0 <= nextColumn && nextColumn < width)) {
+				int blue = m_matImage.at<Vec3b>(nextRow, nextColumn)[0];
+				int green = m_matImage.at<Vec3b>(nextRow, nextColumn)[1];
+				int red = m_matImage.at<Vec3b>(nextRow, nextColumn)[2];
+
+				if (((blue + green + red) / 3 <= 238) && visit[nextRow][nextColumn] == -1) {
+					visit[nextRow][nextColumn] = cellNum;
+
+					if (nextRow > maxR) {
+						maxR = nextRow;
+					}
+					if (nextRow < minR) {
+						minR = nextRow;
+					}
+					if (nextColumn > maxC) {
+						maxC = nextColumn;
+					}
+					if (nextColumn < minC) {
+						minC = nextColumn;
+					}
+
+					q.push(make_pair(nextRow, nextColumn));
+				}
+			}
+		}
+		q.pop();
+	}
+
+	if (maxC - minC > 10) {
+		Cell tmp;
+		tmp.max = make_pair(maxR, maxC);
+		tmp.min = make_pair(minR, minC);
+		//그냥 min이나 max값 이용하면 색상 식별이 이상하게 됨.
+		tmp.info = BoardCellColorTest((maxR+minR)/2, (maxC+minC)/2, m_matImage);
+
+		cells.push_back(tmp);
+	}
+}
+
+char DIPTeamProject_Team5DicerDlg_Board::BoardCellColorTest(int r, int c, Mat m_matImage) {
+	int blue = m_matImage.at<Vec3b>(r, c)[0];
+	int green = m_matImage.at<Vec3b>(r, c)[1];
+	int red = m_matImage.at<Vec3b>(r, c)[2];
+
+	if ((blue + green + red) / 3 <= 70) // 검은칸
+	{
+		// 이거 매 반복문마다 호출됨 -> 나중에 수정해야 됨.
+		dark_color = Vec3b(blue, green, red);
+
+		return 'd';
+	}
+	else if (((blue + green + red) / 3 <= 100)) //초록색칸
+	{
+		return 'g';
+	}
+	else if (((blue + green + red) / 3 <= 140)) //빨간색칸
+	{
+		return 'r';
+	}
+	else if (((blue + green + red) / 3 <= 180)) //파란색칸
+	{
+		return 'b';
+	}
+	else if (((blue + green + red) / 3 <= 215)) //노란색칸
+	{
+		return 'y';
+	}
+	else if ( ((blue + green + red) / 3 <= 238)) //분홍색칸
+	{
+		return 'p';
+	}
+	else {
+		return 'w';
+	}
+}
+
+bool cmpFrist(const Cell& u, const Cell& v) {
+	return u.min.first < v.min.first;
+}
+
+bool cmpSecond(const Cell& u, const Cell& v) {
+	return u.min.second < v.min.second;
+}
+
+bool cmpThird(const Cell& u, const Cell& v) {
+	return u.min.first > v.min.first;
+}
+
+bool cmpFourth(const Cell& u, const Cell& v) {
+	return u.min.second > v.min.second;
+}
+
+void DIPTeamProject_Team5DicerDlg_Board::DistributeCellTest(Mat m_matImage) {
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+
+	for (int i = 0; i < height; i++) {
+		vector<int> tmp(width, -1);
+		visit.push_back(tmp);
+	}
+
+	/*for (int r = 0; r < height; r++) {
+		for (int c = 0; c < width; c++) {
+
+			int blue = m_matImage.at<Vec3b>(r, c)[0];
+			int green = m_matImage.at<Vec3b>(r, c)[1];
+			int red = m_matImage.at<Vec3b>(r, c)[2];
+
+			if (((blue + green + red) / 3 <= 238) && visit[r][c] == -1) {
+				cellNum++;
+				FindCellBound(r, c, m_matImage);
+			}
+		}
+	}*/
+
+	for (int c = 0; c < width/8; c++) {
+		for (int r = 0; r < height; r++) {
+
+			int blue = m_matImage.at<Vec3b>(r, c)[0];
+			int green = m_matImage.at<Vec3b>(r, c)[1];
+			int red = m_matImage.at<Vec3b>(r, c)[2];
+
+			if (((blue + green + red) / 3 <= 238) && visit[r][c] == -1) {
+				cellNum++;
+				FindCellBound(r, c, m_matImage);
+			}
+		}
+		if (cellNum == 5) {
+			break;
+		}
+	}
+
+	sort(cells.begin(), cells.end(), cmpFrist);
+
+	for (int r = cells[5].min.first; r < height; r++) {
+		for (int c = 0; c < width; c++) {
+
+			int blue = m_matImage.at<Vec3b>(r, c)[0];
+			int green = m_matImage.at<Vec3b>(r, c)[1];
+			int red = m_matImage.at<Vec3b>(r, c)[2];
+
+			if (((blue + green + red) / 3 <= 238) && visit[r][c] == -1) {
+				cellNum++;
+				FindCellBound(r, c, m_matImage);
+			}
+		}
+		if (cellNum == 12) {
+			break;
+		}
+	}
+
+	sort(cells.begin()+5, cells.end(), cmpSecond);
+
+	for (int c = cells[12].min.second; c < width; c++) {
+		for (int r = cells[12].min.first; r > 0; r--) {
+
+			int blue = m_matImage.at<Vec3b>(r, c)[0];
+			int green = m_matImage.at<Vec3b>(r, c)[1];
+			int red = m_matImage.at<Vec3b>(r, c)[2];
+
+			if (((blue + green + red) / 3 <= 238) && visit[r][c] == -1) {
+				cellNum++;
+				FindCellBound(r, c, m_matImage);
+			}
+		}
+		if (cellNum == 17) {
+			break;
+		}
+	}
+	sort(cells.begin()+12, cells.end(), cmpThird);
+
+	for (int r = cells[17].max.first; r > 0; r--) {
+		for (int c = cells[17].min.second; c > 0; c--) {
+
+			int blue = m_matImage.at<Vec3b>(r, c)[0];
+			int green = m_matImage.at<Vec3b>(r, c)[1];
+			int red = m_matImage.at<Vec3b>(r, c)[2];
+
+			if (((blue + green + red) / 3 <= 238) && visit[r][c] == -1) {
+				cellNum++;
+				FindCellBound(r, c, m_matImage);
+			}
+		}
+		if (cellNum == 23) {
+			break;
+		}
+	}
+	sort(cells.begin()+17, cells.end(), cmpFourth);
+
+	//int size = cells[0].max.first - cells[0].min.first + 1;
+	//CreateMarker(size);
+}
+
+
 
 void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat cellImg) { // 각 칸이 무슨 픽셀로 이루어져있는지 구분 (UpdateBoard 함수에서 사용)
 
@@ -471,7 +709,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat cellImg) { // 각 �
 	int secondrow[35] = { 0, };
 	int thirdrow[25] = { 0, };
 	int fourthrow[30] = { 0, };
-
+	
 
 	//첫번째줄(6칸) 판별하기 위한 for문1
 	for (int y = 0; y < height; y++) {
@@ -976,8 +1214,8 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat cellImg) { // 각 �
 		//printf("(x-min,y-min) = ( %d , %d ) | (x-max,y-max) = ( %d , %d ) | color: %d\n", fourthrow[i * 5], fourthrow[i * 5 + 1], fourthrow[i * 5 + 3], fourthrow[i * 5 + 4], fourthrow[i * 5 + 2]);
 	}
 
-	int size = cells[0].max.first - cells[0].min.first + 1;
-	CreateMarker(size);
+	/*int size = cells[0].max.first - cells[0].min.first + 1;
+	CreateMarker(size);*/
 }
 
 
@@ -1006,31 +1244,15 @@ char DIPTeamProject_Team5DicerDlg_Board::BoardCellColor(int colornum) { // 칸�
 
 }
 
-Mat DIPTeamProject_Team5DicerDlg_Board::ResizeMarker(int cellsize, Mat m_matImage) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
+Mat DIPTeamProject_Team5DicerDlg_Board::ResizeMarker(int width, int heigth,string path) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
 
 	Mat m_matImageTemp;
 
 	// 보드 칸이 정사각형이라는 가정 (왠지 정사각형으러 만들것같다!!?!!) - 그래서 민지도 일단 정사각형이라 생각하고 함.
-	resize(m_matImage, m_matImageTemp, Size(cellsize, cellsize), 0, 0, 1);
+	Mat markerImage = imread(path , -1);
+	resize(markerImage, m_matImageTemp, Size(width, heigth), 0, 0, 1);
 
 	return m_matImageTemp;
-}
-
-void DIPTeamProject_Team5DicerDlg_Board::CreateMarker(int size) {
-	redMarker = ResizeMarker(size, imread("dice\\r_marker.jpg", -1));
-	blueMarker = ResizeMarker(size, imread("dice\\b_marker.jpg", -1));
-	greenMarker = ResizeMarker(size, imread("dice\\g_marker.jpg", -1));
-}
-
-Mat DIPTeamProject_Team5DicerDlg_Board::GetMarker(int turn) {
-	switch (turn) {
-	case 0:
-		return redMarker;
-	case 1:
-		return blueMarker;
-	case 2:
-		return greenMarker;
-	}
 }
 
 int DIPTeamProject_Team5DicerDlg_Board::GetPosition(int turn) {
@@ -1071,37 +1293,66 @@ bool DIPTeamProject_Team5DicerDlg_Board::IsGreenCatch(int pos) {
 
 void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(Mat m_matImage, int turn) {
 
-	Mat color;
+	Vec3b color;
+
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
 
 	switch (turn) {
 	case 0:
 		color = Vec3b(0, 0, 255);
 		break;
 	case 1:
-		color = Vec3b(0,255, 0);
+		color = Vec3b(255,0, 0);
 		break;
 	case 2:
-		color = Vec3b(255, 0, 0);
+		color = Vec3b(0, 255, 0);
 		break;
 	}
 
-	for (int y = 100; y <= 200; y++) {
+	/*for (int y = 100; y <= 200; y++) {
 		for (int x = 100; x <= 200; x++) {
 			m_matImage.at<Vec3b>(x, y) = color;
 		}
+	}*/
+
+	int cy = height / 2;
+	int cx = width / 2;
+
+	for (int y = cy-60; y <= cy+60; y++) {
+		for (int x = cx-80; x <= cx+80; x++) {
+			m_matImage.at<Vec3b>(y, x) = color;
+		}
 	}
+
+	/*for (int y = cy - 25; y <= cy + 25; y++) {
+		for (int x = cx - 100; x <= cx + 100; x++) {
+			m_matImage.at<Vec3b>(x, y) = color;
+		}
+	}*/
 
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
 }
 
+string DIPTeamProject_Team5DicerDlg_Board::GetMarkerPath(int turn) {
+	switch (turn) {
+	case 0:
+		return "dice\\r_marker.jpg";
+	case 1:
+		return "dice\\b_marker.jpg";
+	case 2:
+		return "dice\\g_marker.jpg";
+	}
+}
+
 void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
 
-	int width = m_matImage.cols;
-	int height = m_matImage.rows;
+	//int width = m_matImage.cols;
+	//int height = m_matImage.rows;
 	int red, green, blue;
 	//Mat marker_matImage = ResizeMarker(셀크기, imread("말 이미지 파일 이름.jpg", -1)); 리사이즈된 말 이미지가 된다
 
-	/*int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
+	int turn = GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
 
 	int originalPos = GetPosition(turn);
 
@@ -1111,9 +1362,9 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 	}
 	else {
 		// 원래 말 있던 곳 되돌림. 검은색으로
-		for (int y = cells[originalPos].min.second; y <= cells[originalPos].max.second; y++) {
-			for (int x = cells[originalPos].min.first; x <= cells[originalPos].max.first; x++) {
-				m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+		for (int r = cells[originalPos].min.first; r <= cells[originalPos].max.first; r++) {
+			for (int c = cells[originalPos].min.second; c <= cells[originalPos].max.second; c++) {
+				m_matImage.at<Vec3b>(r, c) = Vec3b(dark_color);
 			}
 		}
 	}
@@ -1122,48 +1373,60 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 
 	if (newPos == 0) {
 		// 게임 끝난거에 대한거 추가.
-		// 윗부분 제대로 안되어 있어서 런타임 에러 발생함.
 		ShowWinner(m_matImage, turn);
 		return;
 	}
 
-	Mat marker = GetMarker(turn);
+	/*for (int y = cells[newPos].min.first; y <= cells[newPos].max.first; y++) {
+		for (int x = cells[newPos].min.second; x <= cells[newPos].max.second; x++) {
+			m_matImage.at<Vec3b>(y, x) = Vec3b(255, 0, 0);
+			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+		}
+	}*/
+
+	//Mat marker = GetMarker(turn);
+
+	int width = cells[newPos].max.second - cells[newPos].min.second +1;
+	int height = cells[newPos].max.first - cells[newPos].min.first +1;
+	Mat marker = ResizeMarker(width, height, GetMarkerPath(turn));
 
 	int my = 0;
 	int mx = 0;
-	for (int y = cells[newPos].min.second; y <= cells[newPos].max.second; y++) {
+	for (int r = cells[newPos].min.first; r <= cells[newPos].max.first; r++) {
 		mx = 0;
-		for (int x = cells[newPos].min.first; x <= cells[newPos].max.first; x++) {
-			m_matImage.at<Vec3b>(x, y) = marker.at<Vec3b>(mx, my);
+		for (int c = cells[newPos].min.second; c <= cells[newPos].max.second; c++) {
+			m_matImage.at<Vec3b>(r, c) = marker.at<Vec3b>(my, mx);
 			mx++;
 		}
 		my++;
 	}
 
-	ChangeTurn(turn, newPos);*/
+	ChangeTurn(turn, newPos);
 
 	// 소현아 제대로 칸 식별되는건지 확인하려면 1110~1117 부분 주석 해제해서 해봥
-	for (int y = cells[ccc].min.second; y <= cells[ccc].max.second; y++) {
-		for (int x = cells[ccc].min.first; x <= cells[ccc].max.first; x++) {
-			m_matImage.at<Vec3b>(x, y) = Vec3b(255, 0, 0);
+	/*for (int y = cells[ccc].min.first; y <= cells[ccc].max.first; y++) {
+		for (int x = cells[ccc].min.second; x <= cells[ccc].max.second; x++) {
+			m_matImage.at<Vec3b>(y, x) = Vec3b(255, 0, 0);
 			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
 		}
 	}
 
-	ccc++;
+	ccc++;*/
 
-	/*int t = cells.size() - 1;
+	//왼쪽상단이 (0,0)
 
-	for (int y = cells[t].min.second; y <= cells[t].max.second; y++) {
-		for (int x = cells[t].min.first; x <= cells[t].max.first; x++) {
-			m_matImage.at<Vec3b>(x, y) = (0, 0, 255);
-		}
+	/*for (int y = 0; y < height/2; y++) {
+		//for (int x = cells[ccc].min.first; x <= cells[ccc].max.first; x++) {
+			m_matImage.at<Vec3b>(y, 0) = Vec3b(255, 0, 0);
+			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+		//}
 	}*/
 
-	/*for (int y = 100; y <= 200; y++) {
-		for (int x = 100; x <= 200; x++) {
-			m_matImage.at<Vec3b>(x, y) = (0, 0, 255);
-		}
+	/*for (int x = 0; x < width / 2; x++) {
+		//for (int x = cells[ccc].min.first; x <= cells[ccc].max.first; x++) {
+		m_matImage.at<Vec3b>(0, x) = Vec3b(255, 0, 0);
+		//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
+	//}
 	}*/
 
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
