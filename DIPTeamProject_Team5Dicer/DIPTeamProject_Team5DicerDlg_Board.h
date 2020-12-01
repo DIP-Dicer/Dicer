@@ -70,5 +70,4 @@ public:
 	CMyBitmapButton button1;
 	CMyBitmapButton button2;
 	CMyBitmapButton button3;
-	CMyBitmapButton button5;
 };

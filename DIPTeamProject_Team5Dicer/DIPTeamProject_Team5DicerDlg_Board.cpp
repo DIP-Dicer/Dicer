@@ -27,7 +27,6 @@ void DIPTeamProject_Team5DicerDlg_Board::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON1, button1);
 	DDX_Control(pDX, IDC_BUTTON2, button2);
 	DDX_Control(pDX, IDC_BUTTON3, button3);
-	DDX_Control(pDX, IDC_BUTTON5, button5);
 }
 
 
@@ -50,7 +49,6 @@ BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, IDB_BITMAP10);
 	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, IDB_BITMAP11);
 	button3.LoadBitmaps(IDB_BITMAP12, IDB_BITMAP13, NULL, NULL);
-	button5.LoadBitmaps(IDB_BITMAP14, NULL, NULL, NULL);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
