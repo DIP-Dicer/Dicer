@@ -8,6 +8,7 @@
 #include "afxdialogex.h"
 #include <Windows.h>
 
+Mat filter = imread("dice\\filter.jpg");
 
 // DIPTeamProject_Team5DicerDlg_Board 대화 상자
 
@@ -305,6 +306,8 @@ Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드
 	return m_matImg;
 }
 
+
+
 // 여기도 일단 안바꿈.
 int DIPTeamProject_Team5DicerDlg_Board::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
@@ -312,8 +315,6 @@ int DIPTeamProject_Team5DicerDlg_Board::RecognizeDiceNum(Mat m_matImage) { // �
 	int count = 0;
 	int diceNum = 0;
 
-	Mat filter;
-	filter = imread("dice\\filter.jpg");
 	int fw = filter.cols;
 	int fh = filter.rows;
 	Mat t_matImage;
