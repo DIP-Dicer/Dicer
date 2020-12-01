@@ -64,13 +64,10 @@ public:
 	bool IsRedCatch(int pos);
 	bool IsBlueCatch(int pos);
 	bool IsGreenCatch(int pos);
-	void DistributeCell(Mat m_matImage);
 	void FindCellBound(int i, int j, Mat m_matImage);
-	void DistributeCellTest(Mat m_matImage);
-	void BoardSimplication(Mat m_matImage);
-	char BoardCellColorTest(int r, int c, Mat m_matImage);
+	void DistributeCell(Mat m_matImage);
+	char BoardCellColor(int r, int c, Mat m_matImage);
 	void ShowWinner(Mat m_matImage, int turn);
-	char BoardCellColor(int colornum);
 	Mat ResizeMarker(int width, int height, string path);
 	string GetMarkerPath(int turn);
 	void UpdateBoard(Mat m_matImage);
