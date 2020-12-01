@@ -120,12 +120,11 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
-		// 여긴 일단 안건드림.
-		for (int y = 0; y < width; y++) {
-			for (int x = 0; x < height; x++) {
-				blue = m_matImage1.at<Vec3b>(x, y)[0];
-				green = m_matImage1.at<Vec3b>(x, y)[1];
-				red = m_matImage1.at<Vec3b>(x, y)[2];
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
+				blue = m_matImage1.at<Vec3b>(r, c)[0];
+				green = m_matImage1.at<Vec3b>(r, c)[1];
+				red = m_matImage1.at<Vec3b>(r, c)[2];
 
 				blue; green; red;
 
@@ -155,9 +154,6 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 
 
 String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() { // 순서 바꾸기 (red/blue/green 순서대로, 잡으면 한 번 더)
-
-	// 대충 사진 로드 잘 되는지 보려고 짠거니까 순서 구현하는 사람이 므시께 잘 구현해쥬세용!
-	// 이런식으로 파일 이름의 일부가 되는 string만 반환해주면 됩니다
 
 	String team;
 
@@ -383,13 +379,6 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 
 	gamePros.catchFlag = -1;
 
-	/*for (int y = gameInfo.cells[ccc].min.second; y <= gameInfo.cells[ccc].max.second; y++) {
-		for (int x = gameInfo.cells[ccc].min.first; x <= gameInfo.cells[ccc].max.first; x++) {
-			m_matImage2.at<Vec3b>(x, y) = Vec3b(255, 0, 0);
-			//m_matImage.at<Vec3b>(x, y) = Vec3b(dark_color);
-		}
-	}
-	ccc++;*/
 	DrawImage(IDC_PIC_VIEW2, m_matImage2);
 }
 

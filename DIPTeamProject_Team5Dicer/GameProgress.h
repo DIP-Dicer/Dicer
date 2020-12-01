@@ -39,5 +39,4 @@ private:
 	int turn = 0; // turn은 현재 순서인 팀
 	int redPos = -1, bluePos = -1, greenPos = -1;
 	Distribution gameInfo;
-	//vector<Cell> cells;
 };

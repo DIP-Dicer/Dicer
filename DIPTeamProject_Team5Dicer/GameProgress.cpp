@@ -9,10 +9,6 @@ void GameProgress::setDistribution(Distribution tmp) {
 	gameInfo = tmp;
 }
 
-/*void GameProgress::setCellsInfo(vector<Cell> cell) {
-	copy(cell.begin(), cell.end(), cells.begin());
-}*/
-
 int GameProgress::GetCurrentTurn() {
 	return turn;
 }
