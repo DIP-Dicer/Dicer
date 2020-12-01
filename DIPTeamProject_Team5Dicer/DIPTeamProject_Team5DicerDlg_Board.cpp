@@ -139,6 +139,10 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		else if (green > 150 && GetCurrentTurn() == 2)
 			break;
 	}
+
+	GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+	GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
+
 }
 
 
@@ -266,6 +270,9 @@ void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(Mat m_matImage, int nowTurn,
 
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
 	UpdateBoard(m_matImage2);
+
+	GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
+	GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
 }
 
 // 여기도 안바꿈.
@@ -740,6 +747,3 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 	ccc++;*/
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
 }
-
-// 반환값 도통 모르겠는 부분은 일단 void로 해놨어욥
-// 엥? 이게 뭐야? 싶은 부분이 있우먄 당장 슬랙에다 서율아 멍청한 놈아~~~~~~!~!~! 이게 뭐야~~~~~~~!~! 외쳐주시길...........
