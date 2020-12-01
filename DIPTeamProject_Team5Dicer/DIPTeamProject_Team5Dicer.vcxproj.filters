@@ -39,6 +39,12 @@
     <ClInclude Include="MyBitmapButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GameProgress.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Distribution.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIPTeamProject_Team5Dicer.cpp">
@@ -54,6 +60,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyBitmapButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgress.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Distribution.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
