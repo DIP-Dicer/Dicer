@@ -390,16 +390,11 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 		}
 	}
 	ccc++;*/
-<<<<<<< HEAD
-
 	DrawImage(IDC_PIC_VIEW2, m_matImage2);
 }
-=======
-	DrawImage(IDC_PIC_VIEW2, m_matImage);
-}
+
 
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3()
 {
 	AfxMessageBox(_T("SkinButton!"));
 }
->>>>>>> 626f99151af3af4886750b806ec451aabb9c2646
