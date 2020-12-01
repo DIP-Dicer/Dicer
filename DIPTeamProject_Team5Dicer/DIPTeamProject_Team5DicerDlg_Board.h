@@ -37,40 +37,44 @@ protected:
 
 public:
 	vector<Cell> cells; // 보드 위의 각 cell의 위치 정보, 특수 칸 정보가 담겨 있음.
+	vector<Cell> cellsTmp;
 	Mat m_matImg1, m_matImg2, m_matImage1, m_matImage2; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
 	BITMAPINFO* m_pBitmapInfo;
 	int imgSize = 400;
 	String boardFile;
 	Vec3b dark_color;
+	vector<vector<int>> visit;
 	//확인용변수
 	int ccc = 0;
+	int cellNum = 0;
+	int dx[4] = { 1,-1,0,0 };
+	int dy[4] = { 0,0,1,-1 };
 
 	void CreateBitmapInfo(int width, int height);
 	void DrawImage(int id, Mat m_matImage);
 	String CurrentDiceTurn();
 	String LoadDice();
 	int GetCurrentTurn();
-	void ChangeTurn(int turn, int pos);
+	void ChangeTurn(Mat m_matImage, int turn, int pos);
 	Mat Binarization(Mat m_matImage);
 	int RecognizeDiceNum(Mat m_matImage);
 	int FindSpecialPosition(int pos);
 	int CalculatePosition(int pos);
 	int GetPosition(int turn);
-	bool IsRedCatch(int pos);
-	bool IsBlueCatch(int pos);
-	bool IsGreenCatch(int pos);
+	bool IsRedCatch(Mat m_matImage,int pos);
+	bool IsBlueCatch(Mat m_matImage, int pos);
+	bool IsGreenCatch(Mat m_matImage, int pos);
+	void FindCellBound(int i, int j, Mat m_matImage);
 	void DistributeCell(Mat m_matImage);
-	void BoardSimplication(Mat m_matImage);
-	void CreateMarker(int size);
+	char BoardCellColor(int r, int c, Mat m_matImage);
 	void ShowWinner(Mat m_matImage, int turn);
-	Mat GetMarker(int turn);
-	char BoardCellColor(int colornum);
-	Mat ResizeMarker(int cellsize, Mat m_matImage);
+	void DrawBoardCenterImage(Mat m_matImage, string path);
+	Mat ResizeImage(int width, int height, string path);
+	string GetMarkerPath(int turn);
 	void UpdateBoard(Mat m_matImage);
 private:
 	int turn = 0; // turn은 현재 순서인 팀
 	int redPos = -1, bluePos = -1, greenPos = -1;
-	Mat redMarker, blueMarker, greenMarker;
 
 protected:
 	HICON m_hIcon;
