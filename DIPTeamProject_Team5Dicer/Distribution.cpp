@@ -113,9 +113,9 @@ char Distribution::BoardCellColor(int r, int c) {
 
 	if ((blue + green + red) / 3 <= 70) // 검은칸
 	{
-		// 이거 매 반복문마다 호출됨 -> 나중에 수정해야 됨.
-		dark_color = Vec3b(blue, green, red);
-
+		if (flag) {
+			dark_color = Vec3b(blue, green, red);
+		}
 		return 'd';
 	}
 	else if (((blue + green + red) / 3 <= 100)) //초록색칸
