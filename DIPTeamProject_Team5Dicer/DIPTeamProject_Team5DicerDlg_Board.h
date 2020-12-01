@@ -9,6 +9,7 @@
 #include <time.h>
 #include <vector>
 #include <queue>
+#include "MyBitmapButton.h"
 
 using namespace cv;
 using namespace std;
@@ -87,4 +88,6 @@ protected:
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
+	CMyBitmapButton button1;
+	CMyBitmapButton button2;
 };

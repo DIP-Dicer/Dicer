@@ -26,6 +26,8 @@ DIPTeamProject_Team5DicerDlg_Board::~DIPTeamProject_Team5DicerDlg_Board()
 void DIPTeamProject_Team5DicerDlg_Board::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON1, button1);
+	DDX_Control(pDX, IDC_BUTTON2, button2);
 }
 
 
@@ -43,6 +45,9 @@ BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 	CDIPTeamProjectTeam5DicerDlg* pDlg = (CDIPTeamProjectTeam5DicerDlg*)AfxGetMainWnd();
 	boardFile = pDlg->getBoardName();
 	pDlg->SendMessage(WM_CLOSE, 0, 0);
+
+	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, NULL);
+	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, NULL);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
