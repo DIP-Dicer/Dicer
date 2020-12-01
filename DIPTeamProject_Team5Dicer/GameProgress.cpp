@@ -173,10 +173,10 @@ int GameProgress::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (Ca
 	int height = t_matImage.rows;
 
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			if (t_matImage.at<Vec3b>(x, y)[0] == 0) {
-				count = count + filter.at<Vec3b>(x, y)[0];
+	for (int row = 0; row < height; row++) {
+		for (int col = 0; col < width; col++) {
+			if (t_matImage.at<Vec3b>(col, row)[0] == 0) {
+				count = count + filter.at<Vec3b>(col, row)[0];
 			}
 		}
 	}
