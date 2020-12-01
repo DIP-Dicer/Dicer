@@ -271,8 +271,8 @@ Mat DIPTeamProject_Team5DicerDlg_Board::Binarization(Mat m_matImage) { // 보드
 	int color, blue, green, red;
 	Mat m_matImg = Mat::zeros(height, width, m_matImage.type());
 
-	for (int y = 0; y < width; y++) {
-		for (int x = 0; x < height; x++) {
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
 			blue = m_matImage.at<Vec3b>(x, y)[0];
 			green = m_matImage.at<Vec3b>(x, y)[1];
 			red = m_matImage.at<Vec3b>(x, y)[2];
@@ -360,6 +360,7 @@ int DIPTeamProject_Team5DicerDlg_Board::FindSpecialPosition(int pos) {
 int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
 
 	//어차피 근데 RecognizeDiceNum에서 binarization 하는거 아닌가?
+	//받아서 resize 하고 한번 더 하는거야! 여기서 하는것도 맞아
 	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
 //<<<<<<< HEAD
 	int tmp = pos + pips;
