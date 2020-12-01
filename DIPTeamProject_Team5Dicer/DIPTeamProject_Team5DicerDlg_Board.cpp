@@ -360,10 +360,10 @@ int  DIPTeamProject_Team5DicerDlg_Board::CalculatePosition(int pos) { // 현재 
 	//int tmp = rand() % 6 + 1;
 
 	int pips = RecognizeDiceNum(Binarization(m_matImage1)); // 주사위 눈 개수
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	int tmp = pos + pips;
-=======
->>>>>>> ab655f322ae7cc7a76a59be74832f52c002a2634
+//=======
+//>>>>>>> ab655f322ae7cc7a76a59be74832f52c002a2634
 
 	pos += pips;
 
