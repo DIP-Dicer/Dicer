@@ -37,6 +37,7 @@ public:
 	int imgSize = 400;
 	String boardFile;
 
+	bool end = false;
 	int ccc = 0;
 
 	void CreateBitmapInfo(int width, int height);

@@ -122,5 +122,44 @@
     <Image Include="dice\Logo_Focus.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="imageAsset\boardbutton1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\boardbutton7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\button1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\button2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\disable1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\disable2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\Logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="imageAsset\Logo_Focus.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

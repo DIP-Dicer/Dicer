@@ -46,6 +46,9 @@ BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 	boardFile = pDlg->getBoardName();
 	pDlg->SendMessage(WM_CLOSE, 0, 0);
 
+	GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
+	GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+
 	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, IDB_BITMAP10);
 	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, IDB_BITMAP11);
 	button3.LoadBitmaps(IDB_BITMAP12, IDB_BITMAP13, NULL, NULL);
@@ -83,14 +86,14 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
-		m_matImg3 = imread("dice\\rules.jpg", -1);
+		m_matImg3 = imread("imageAsset\\rules.jpg", -1);
 		resize(m_matImg3, m_matImage3, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage3.cols, m_matImage3.rows);
 		DrawImage(IDC_PIC_VIEW3, m_matImage3);
 
 		gameInfo.SetBoardImage(m_matImage2);
 		gamePros.setDistribution(gameInfo);
-		DrawBoardCenterImage("dice\\base_redTurn.jpg");
+		DrawBoardCenterImage("imageAsset\\base_redTurn.jpg");
 	}
 }
 
@@ -146,8 +149,15 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 			break;
 	}
 	gamePros.setDiceImage(m_matImage1);
-	GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
+
+	if (end == false) {
+		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
+	}
+	else {
+		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+	}
 }
 
 
@@ -159,13 +169,13 @@ String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() { // 순서 바꾸�
 
 	switch (turn) {
 	case 0:
-		team = "dice\\red_";
+		team = "imageAsset\\red_";
 		break;
 	case 1:
-		team = "dice\\blue_";
+		team = "imageAsset\\blue_";
 		break;
 	case 2:
-		team = "dice\\green_";
+		team = "imageAsset\\green_";
 		break;
 	}
 
@@ -232,8 +242,14 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawImage(int id, Mat m_matImage) { // 
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동하기' 버튼 클릭하면 말 움직이는 함수 호출
 	UpdateBoard();
 
-	GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+	if (end == false) {
+		GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+	}
+	else {
+		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+	}
 }
 
 Mat DIPTeamProject_Team5DicerDlg_Board::ResizeImage(int width, int heigth,string path) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
@@ -272,11 +288,11 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(string path) {
 string DIPTeamProject_Team5DicerDlg_Board::GetMarkerPath(int turn) {
 	switch (turn) {
 	case 0:
-		return "dice\\r_marker.jpg";
+		return "imageAsset\\r_marker.jpg";
 	case 1:
-		return "dice\\b_marker.jpg";
+		return "imageAsset\\b_marker.jpg";
 	case 2:
-		return "dice\\g_marker.jpg";
+		return "imageAsset\\g_marker.jpg";
 	}
 }
 
@@ -285,31 +301,32 @@ void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(int turn) {
 
 	switch (turn) {
 	case 0:
-		path = "dice\\base_redWins.jpg";
+		path = "imageAsset\\base_redWins.jpg";
 		break;
 	case 1:
-		path = "dice\\base_blueWins.jpg";
+		path = "imageAsset\\base_blueWins.jpg";
 		break;
 	case 2:
-		path = "dice\\base_greenWins.jpg";
+		path = "imageAsset\\base_greenWins.jpg";
 		break;
 	}
 
+	end = true;
 	DrawBoardCenterImage(path);
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::DrawCatchImage(int catchCase) {
 	switch (catchCase) {
 	case 0:
-		DrawBoardCenterImage("dice\\base_redDead.jpg");
+		DrawBoardCenterImage("imageAsset\\base_redDead.jpg");
 		Sleep(1100);
 		break;
 	case 1:
-		DrawBoardCenterImage("dice\\base_blueDead.jpg");
+		DrawBoardCenterImage("imageAsset\\base_blueDead.jpg");
 		Sleep(1100);
 		break;
 	case 2:
-		DrawBoardCenterImage("dice\\base_greenDead.jpg");
+		DrawBoardCenterImage("imageAsset\\base_greenDead.jpg");
 		Sleep(1100);
 		break;
 	}
@@ -318,13 +335,13 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawCatchImage(int catchCase) {
 void DIPTeamProject_Team5DicerDlg_Board::DrawTurnImage(int turn) {
 	switch (turn) {
 	case 0:
-		DrawBoardCenterImage("dice\\base_redTurn.jpg");
+		DrawBoardCenterImage("imageAsset\\base_redTurn.jpg");
 		break;
 	case 1:
-		DrawBoardCenterImage("dice\\base_blueTurn.jpg");
+		DrawBoardCenterImage("imageAsset\\base_blueTurn.jpg");
 		break;
 	case 2:
-		DrawBoardCenterImage("dice\\base_greenTurn.jpg");
+		DrawBoardCenterImage("imageAsset\\base_greenTurn.jpg");
 	}
 }
 
@@ -353,6 +370,8 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 
 	if (newPos == 0) {
 		ShowWinner(turn);
+		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
 		return;
 	}
 

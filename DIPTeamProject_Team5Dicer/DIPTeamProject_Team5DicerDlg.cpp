@@ -96,7 +96,7 @@ String CDIPTeamProjectTeam5DicerDlg::getBoardName() {
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board1.jpg";
+	boardName = "imageAsset\\board1.jpg";
 	m_board.DoModal();
 }
 
@@ -104,7 +104,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board2.jpg";
+	boardName = "imageAsset\\board2.jpg";
 	m_board.DoModal();
 }
 
@@ -112,7 +112,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board3.jpg";
+	boardName = "imageAsset\\board3.jpg";
 	m_board.DoModal();
 }
 
@@ -120,7 +120,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board4.jpg";
+	boardName = "imageAsset\\board4.jpg";
 	m_board.DoModal();
 }
 
@@ -128,7 +128,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board5.jpg";
+	boardName = "imageAsset\\board5.jpg";
 	m_board.DoModal();
 }
 
@@ -136,7 +136,7 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5()
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6()
 {
 	DIPTeamProject_Team5DicerDlg_Board m_board;
-	boardName = "dice\\board6.jpg";
+	boardName = "imageAsset\\board6.jpg";
 	m_board.DoModal();
 }
 
@@ -150,17 +150,17 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7()
 
 	switch (randNum) {
 	case 0:
-		boardName = "dice\\board1.jpg";	break;
+		boardName = "imageAsset\\board1.jpg";	break;
 	case 1:
-		boardName = "dice\\board2.jpg";	break;
+		boardName = "imageAsset\\board2.jpg";	break;
 	case 2:
-		boardName = "dice\\board3.jpg";	break;
+		boardName = "imageAsset\\board3.jpg";	break;
 	case 3:
-		boardName = "dice\\board4.jpg";	break;
+		boardName = "imageAsset\\board4.jpg";	break;
 	case 4:
-		boardName = "dice\\board5.jpg";	break;
+		boardName = "imageAsset\\board5.jpg";	break;
 	case 5:
-		boardName = "dice\\board6.jpg";	break;
+		boardName = "imageAsset\\board6.jpg";	break;
 	}
 
 	m_board.DoModal();

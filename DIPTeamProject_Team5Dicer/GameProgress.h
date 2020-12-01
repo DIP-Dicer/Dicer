@@ -34,7 +34,7 @@ public:
 	Mat Binarization(Mat m_matImage);
 	int RecognizeDiceNum(Mat m_matImage);
 private:
-	Mat filter = imread("dice\\filter.jpg");
+	Mat filter = imread("imageAsset\\filter.jpg");
 	Mat diceImage;
 	int turn = 0; // turn은 현재 순서인 팀
 	int redPos = -1, bluePos = -1, greenPos = -1;
