@@ -1,13 +1,8 @@
-﻿// DIPTeamProject_Team5DicerDlg_Board.cpp: 구현 파일
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "DIPTeamProject_Team5Dicer.h"
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
-
-// DIPTeamProject_Team5DicerDlg_Board 대화 상자
 
 IMPLEMENT_DYNAMIC(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 
@@ -402,5 +397,6 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3()
 {
-	AfxMessageBox(_T("SkinButton!"));
+	DeveloperDlg dlg;
+	dlg.DoModal();
 }

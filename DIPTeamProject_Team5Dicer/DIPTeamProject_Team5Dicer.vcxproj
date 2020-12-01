@@ -189,6 +189,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DeveloperDlg.h" />
     <ClInclude Include="DIPTeamProject_Team5Dicer.h" />
     <ClInclude Include="DIPTeamProject_Team5DicerDlg.h" />
     <ClInclude Include="DIPTeamProject_Team5DicerDlg_Board.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DeveloperDlg.cpp" />
     <ClCompile Include="DIPTeamProject_Team5Dicer.cpp" />
     <ClCompile Include="DIPTeamProject_Team5DicerDlg.cpp" />
     <ClCompile Include="DIPTeamProject_Team5DicerDlg_Board.cpp" />

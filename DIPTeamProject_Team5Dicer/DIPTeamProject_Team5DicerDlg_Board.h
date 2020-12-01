@@ -11,6 +11,7 @@
 #include "MyBitmapButton.h"
 #include "GameProgress.h"
 #include "Distribution.h"
+#include "DeveloperDlg.h"
 
 using namespace cv;
 using namespace std;
