@@ -73,9 +73,11 @@ public:
 	Mat ResizeImage(int width, int height, string path);
 	string GetMarkerPath(int turn);
 	void UpdateBoard(Mat m_matImage);
+	void ButtonImageLoad(int state);
 private:
 	int turn = 0; // turn은 현재 순서인 팀
 	int redPos = -1, bluePos = -1, greenPos = -1;
+	bool dicebuttonEnable = true;
 
 protected:
 	HICON m_hIcon;

@@ -98,5 +98,11 @@
     <Image Include="dice\button2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="dice\disable1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\disable2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
