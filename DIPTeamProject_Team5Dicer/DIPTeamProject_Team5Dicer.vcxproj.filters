@@ -116,5 +116,14 @@
     <Image Include="dice\disable2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="dice\Logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\Logo_Focus.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="dice\sharks.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

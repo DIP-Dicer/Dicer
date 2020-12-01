@@ -232,6 +232,9 @@
     <Image Include="dice\button2.bmp" />
     <Image Include="dice\disable1.bmp" />
     <Image Include="dice\disable2.bmp" />
+    <Image Include="dice\Logo.bmp" />
+    <Image Include="dice\Logo_Focus.bmp" />
+    <Image Include="dice\sharks.bmp" />
     <Image Include="res\DIPTeamProject_Team5Dicer.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
