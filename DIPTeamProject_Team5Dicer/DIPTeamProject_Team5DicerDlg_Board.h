@@ -39,7 +39,7 @@ protected:
 public:
 	vector<Cell> cells; // 보드 위의 각 cell의 위치 정보, 특수 칸 정보가 담겨 있음.
 	vector<Cell> cellsTmp;
-	Mat m_matImg1, m_matImg2, m_matImg3, m_matImage1, m_matImage2, m_matImage3; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
+	Mat m_matImg1, m_matImg2, m_matImg3, m_matImg4, m_matImage1, m_matImage2, m_matImage3, m_matImage4; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
 	BITMAPINFO* m_pBitmapInfo;
 	int imgSize = 400;
 	String boardFile;
@@ -88,6 +88,9 @@ protected:
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
 	CMyBitmapButton button1;
 	CMyBitmapButton button2;
+	CMyBitmapButton button3;
+	CMyBitmapButton button5;
 };

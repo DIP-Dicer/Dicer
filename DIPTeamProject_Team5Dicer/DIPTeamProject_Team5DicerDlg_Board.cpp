@@ -29,6 +29,8 @@ void DIPTeamProject_Team5DicerDlg_Board::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, button1);
 	DDX_Control(pDX, IDC_BUTTON2, button2);
+	DDX_Control(pDX, IDC_BUTTON3, button3);
+	DDX_Control(pDX, IDC_BUTTON5, button5);
 }
 
 
@@ -37,6 +39,7 @@ BEGIN_MESSAGE_MAP(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
@@ -49,6 +52,8 @@ BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 
 	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, IDB_BITMAP10);
 	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, IDB_BITMAP11);
+	button3.LoadBitmaps(IDB_BITMAP12, IDB_BITMAP13, NULL, NULL);
+	button5.LoadBitmaps(IDB_BITMAP14, NULL, NULL, NULL);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
@@ -751,4 +756,9 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 
 	ccc++;*/
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
+}
+
+void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3()
+{
+	AfxMessageBox(_T("SkinButton!"));
 }
