@@ -120,12 +120,11 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
-		// 여긴 일단 안건드림.
-		for (int y = 0; y < width; y++) {
-			for (int x = 0; x < height; x++) {
-				blue = m_matImage1.at<Vec3b>(x, y)[0];
-				green = m_matImage1.at<Vec3b>(x, y)[1];
-				red = m_matImage1.at<Vec3b>(x, y)[2];
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
+				blue = m_matImage1.at<Vec3b>(r, c)[0];
+				green = m_matImage1.at<Vec3b>(r, c)[1];
+				red = m_matImage1.at<Vec3b>(r, c)[2];
 
 				blue; green; red;
 
