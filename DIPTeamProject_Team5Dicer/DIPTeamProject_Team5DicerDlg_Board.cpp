@@ -47,8 +47,8 @@ BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 	boardFile = pDlg->getBoardName();
 	pDlg->SendMessage(WM_CLOSE, 0, 0);
 
-	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, NULL);
-	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, NULL);
+	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, IDB_BITMAP10);
+	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, IDB_BITMAP11);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
@@ -96,13 +96,6 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 HCURSOR DIPTeamProject_Team5DicerDlg_Board::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
-}
-
-void DIPTeamProject_Team5DicerDlg_Board::ButtonImageLoad(int state) {
-	if (state == 0) { //start
-		button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, NULL);
-		button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, NULL);
-	}
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 굴리기' 버튼 클릭하면 red, blue, green 팀 순서대로 랜덤하게 주사위 이미지 띄움
@@ -155,11 +148,6 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // '주사위 �
 
 	GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
 	GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
-	//dicebuttonEnable = false;
-
-	//button1.LoadBitmaps(IDB_BITMAP10, NULL, NULL, NULL);
-	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, NULL);
-
 }
 
 
@@ -290,9 +278,6 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동�
 
 	GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
 	GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
-	
-	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, NULL);
-	button2.LoadBitmaps(IDB_BITMAP11, NULL, NULL, NULL);
 }
 
 // 여기도 안바꿈.
