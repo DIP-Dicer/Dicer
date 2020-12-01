@@ -77,6 +77,11 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
+		m_matImg3 = imread("dice\\rules.jpg", -1);
+		resize(m_matImg3, m_matImage3, Size(imgSize, imgSize), 0, 0, 1);
+		CreateBitmapInfo(m_matImage3.cols, m_matImage3.rows);
+		DrawImage(IDC_PIC_VIEW3, m_matImage3);
+
 		DistributeCell(m_matImage2);
 		DrawBoardCenterImage(m_matImage2, "dice\\base_redTurn.jpg");
 	}
