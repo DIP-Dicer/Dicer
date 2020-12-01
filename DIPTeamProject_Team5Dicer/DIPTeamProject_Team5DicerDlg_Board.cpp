@@ -6,6 +6,7 @@
 #include "DIPTeamProject_Team5DicerDlg_Board.h"
 #include "DIPTeamProject_Team5DicerDlg.h"
 #include "afxdialogex.h"
+#include <Windows.h>
 
 
 // DIPTeamProject_Team5DicerDlg_Board 대화 상자
@@ -77,6 +78,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		DrawImage(IDC_PIC_VIEW2, m_matImage2);
 
 		DistributeCell(m_matImage2);
+		DrawBoardCenterImage(m_matImage2, "dice\\base_redTurn.jpg");
 	}
 }
 
@@ -220,32 +222,38 @@ int DIPTeamProject_Team5DicerDlg_Board::GetCurrentTurn() {
 	return turn;
 }
 
-void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(int nowTurn, int pos) {
+void DIPTeamProject_Team5DicerDlg_Board::ChangeTurn(Mat m_matImage, int nowTurn, int pos) {
 	switch (nowTurn) {
 	case 0:
 		redPos = pos;
-		if (IsBlueCatch(pos) || IsGreenCatch(pos)) {
+		if (IsBlueCatch(m_matImage, pos) || IsGreenCatch(m_matImage, pos)) {
+			DrawBoardCenterImage(m_matImage, "dice\\base_redTurn.jpg");
 			turn = nowTurn;
 		}
 		else {
 			turn++;
+			DrawBoardCenterImage(m_matImage, "dice\\base_blueTurn.jpg");
 		}
 		break;
 	case 1:
 		bluePos = pos;
-		if (IsRedCatch(pos) || IsGreenCatch(pos)) {
+		if (IsRedCatch(m_matImage, pos) || IsGreenCatch(m_matImage, pos)) {
 			turn = nowTurn;
+			DrawBoardCenterImage(m_matImage, "dice\\base_blueTurn.jpg");
 		}
 		else {
+			DrawBoardCenterImage(m_matImage, "dice\\base_greenTurn.jpg");
 			turn++;
 		}
 		break;
 	case 2:
 		greenPos = pos;
-		if (IsRedCatch(pos) || IsBlueCatch(pos)) {
+		if (IsRedCatch(m_matImage, pos) || IsBlueCatch(m_matImage, pos)) {
 			turn = nowTurn;
+			DrawBoardCenterImage(m_matImage, "dice\\base_greenTurn.jpg");
 		}
 		else {
+			DrawBoardCenterImage(m_matImage, "dice\\base_redTurn.jpg");
 			turn = 0;
 		}
 	}
@@ -561,7 +569,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DistributeCell(Mat m_matImage) {
 	sort(cells.begin()+17, cells.end(), cmpFourth);
 }
 
-Mat DIPTeamProject_Team5DicerDlg_Board::ResizeMarker(int width, int heigth,string path) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
+Mat DIPTeamProject_Team5DicerDlg_Board::ResizeImage(int width, int heigth,string path) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
 
 	Mat m_matImageTemp;
 
@@ -583,24 +591,30 @@ int DIPTeamProject_Team5DicerDlg_Board::GetPosition(int turn) {
 }
 
 // 잡았을 때 무슨 말이 잡혔습니다! 이런거 나오면 좋을 듯.
-bool DIPTeamProject_Team5DicerDlg_Board::IsRedCatch(int pos) {
+bool DIPTeamProject_Team5DicerDlg_Board::IsRedCatch(Mat m_matImage, int pos) {
 	if (redPos == pos) {
+		DrawBoardCenterImage(m_matImage, "dice\\base_redDead.jpg");
+		Sleep(1100);
 		redPos = -1;
 		return true;
 	}
 	return false;
 }
 
-bool DIPTeamProject_Team5DicerDlg_Board::IsBlueCatch(int pos) {
+bool DIPTeamProject_Team5DicerDlg_Board::IsBlueCatch(Mat m_matImage, int pos) {
 	if (bluePos == pos) {
+		DrawBoardCenterImage(m_matImage, "dice\\base_blueDead.jpg");
+		Sleep(1100);
 		bluePos = -1;
 		return true;
 	}
 	return false;
 }
 
-bool DIPTeamProject_Team5DicerDlg_Board::IsGreenCatch(int pos) {
+bool DIPTeamProject_Team5DicerDlg_Board::IsGreenCatch(Mat m_matImage, int pos) {
 	if (greenPos == pos) {
+		DrawBoardCenterImage(m_matImage, "dice\\base_greenDead.jpg");
+		Sleep(1100);
 		greenPos = -1;
 		return true;
 	}
@@ -608,31 +622,41 @@ bool DIPTeamProject_Team5DicerDlg_Board::IsGreenCatch(int pos) {
 }
 
 void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(Mat m_matImage, int turn) {
-
-	Vec3b color;
-
-	int width = m_matImage.cols;
-	int height = m_matImage.rows;
+	string path;
 
 	switch (turn) {
 	case 0:
-		color = Vec3b(0, 0, 255);
+		path = "dice\\base_redWins.jpg";
 		break;
 	case 1:
-		color = Vec3b(255,0, 0);
+		path = "dice\\base_blueWins.jpg";
 		break;
 	case 2:
-		color = Vec3b(0, 255, 0);
+		path = "dice\\base_greenWins.jpg";
 		break;
 	}
 
-	int cy = height / 2;
-	int cx = width / 2;
+	DrawBoardCenterImage(m_matImage, path);
+}
 
-	for (int y = cy-60; y <= cy+60; y++) {
-		for (int x = cx-80; x <= cx+80; x++) {
-			m_matImage.at<Vec3b>(y, x) = color;
+void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(Mat m_matImage, string path) {
+	int width = m_matImage.cols;
+	int height = m_matImage.rows;
+
+	int cr = height / 2;
+	int cc = width / 2;
+	int bc = 0;
+	int br = 0;
+
+	Mat boardImage = ResizeImage(161, 121, path);
+
+	for (int r = cr - 60; r <= cr + 60; r++) {
+		bc = 0;
+		for (int c = cc - 80; c <= cc + 80; c++) {
+			m_matImage.at<Vec3b>(r, c) = boardImage.at<Vec3b>(br, bc);
+			bc++;
 		}
+		br++;
 	}
 
 	DrawImage(IDC_PIC_VIEW2, m_matImage);
@@ -680,7 +704,7 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 
 	int width = cells[newPos].max.second - cells[newPos].min.second +1;
 	int height = cells[newPos].max.first - cells[newPos].min.first +1;
-	Mat marker = ResizeMarker(width, height, GetMarkerPath(turn));
+	Mat marker = ResizeImage(width, height, GetMarkerPath(turn));
 
 	int my = 0;
 	int mx = 0;
@@ -693,7 +717,7 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard(Mat m_matImage) { // 이동
 		my++;
 	}
 
-	ChangeTurn(turn, newPos);
+	ChangeTurn(m_matImage, turn, newPos);
 
 	// 소현아 제대로 칸 식별되는건지 확인하려면 1110~1117 부분 주석 해제해서 해봥
 	/*for (int y = cells[ccc].min.first; y <= cells[ccc].max.first; y++) {

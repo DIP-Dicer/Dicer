@@ -55,26 +55,26 @@ public:
 	String CurrentDiceTurn();
 	String LoadDice();
 	int GetCurrentTurn();
-	void ChangeTurn(int turn, int pos);
+	void ChangeTurn(Mat m_matImage, int turn, int pos);
 	Mat Binarization(Mat m_matImage);
 	int RecognizeDiceNum(Mat m_matImage);
 	int FindSpecialPosition(int pos);
 	int CalculatePosition(int pos);
 	int GetPosition(int turn);
-	bool IsRedCatch(int pos);
-	bool IsBlueCatch(int pos);
-	bool IsGreenCatch(int pos);
+	bool IsRedCatch(Mat m_matImage,int pos);
+	bool IsBlueCatch(Mat m_matImage, int pos);
+	bool IsGreenCatch(Mat m_matImage, int pos);
 	void FindCellBound(int i, int j, Mat m_matImage);
 	void DistributeCell(Mat m_matImage);
 	char BoardCellColor(int r, int c, Mat m_matImage);
 	void ShowWinner(Mat m_matImage, int turn);
-	Mat ResizeMarker(int width, int height, string path);
+	void DrawBoardCenterImage(Mat m_matImage, string path);
+	Mat ResizeImage(int width, int height, string path);
 	string GetMarkerPath(int turn);
 	void UpdateBoard(Mat m_matImage);
 private:
 	int turn = 0; // turn은 현재 순서인 팀
 	int redPos = -1, bluePos = -1, greenPos = -1;
-	Mat redMarker, blueMarker, greenMarker;
 
 protected:
 	HICON m_hIcon;
