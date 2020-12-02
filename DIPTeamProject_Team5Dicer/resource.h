@@ -18,7 +18,6 @@
 #define IDB_BITMAP11                    144
 #define IDB_BITMAP12                    145
 #define IDB_BITMAP13                    146
-#define IDD_DIALOG1                     148
 #define IDD_DEVELOPER                   148
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001
