@@ -21,7 +21,7 @@ class DIPTeamProject_Team5DicerDlg_Board : public CDialogEx
 	DECLARE_DYNAMIC(DIPTeamProject_Team5DicerDlg_Board)
 
 public:
-	DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent = nullptr);
 	virtual ~DIPTeamProject_Team5DicerDlg_Board();
 
 // 대화 상자 데이터입니다.
@@ -30,10 +30,10 @@ public:
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
+	virtual void DoDataExchange(CDataExchange* pDX);
 
 public:
-	Mat m_matImg1, m_matImg2, m_matImg3, m_matImg4, m_matImage1, m_matImage2, m_matImage3, m_matImage4; // m_matImage1에는 주사위 그림, m_matImage2에는 보드 그림
+	Mat m_matImg1, m_matImg2, m_matImg3, m_matImg4, m_matImage1, m_matImage2, m_matImage3, m_matImage4;
 	BITMAPINFO* m_pBitmapInfo;
 	int imgSize = 400;
 	String boardFile;
@@ -42,7 +42,7 @@ public:
 	int ccc = 0;
 
 	void CreateBitmapInfo(int width, int height);
-	void DrawImage(int id, Mat m_matImage);
+	void DrawBasicImage(int id, Mat m_matImage);
 	String CurrentDiceTurn();
 	String LoadDice();
 	void DrawBoardCenterImage(string path);

@@ -11,6 +11,7 @@
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif*/
 
+// 보드 선택 화면
 
 CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG, pParent)
@@ -47,6 +48,7 @@ BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	// 버튼에 bitmap 이미지 입히기
 	boardbutton1.LoadBitmaps(IDB_BITMAP1, NULL, NULL, NULL);
 	boardbutton2.LoadBitmaps(IDB_BITMAP2, NULL, NULL, NULL);
 	boardbutton3.LoadBitmaps(IDB_BITMAP3, NULL, NULL, NULL);
@@ -92,59 +94,60 @@ HCURSOR CDIPTeamProjectTeam5DicerDlg::OnQueryDragIcon()
 }
 
 String CDIPTeamProjectTeam5DicerDlg::getBoardName() {
+
+	// 게임 화면 클래스에 선택된 보드 이미지에 해당하는 파일명 전달
+
 	return boardName;
 }
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1()
-{
+// 보드 이미지 파일명 지정하고 게임 진행 다이얼로그 생성
+
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // 'Board 1' 버튼 클릭 시
+
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board1.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2() { // 'Board 2' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton2()
-{
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board2.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3() { // 'Board 3' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton3()
-{
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board3.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4() { // 'Board 4' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton4()
-{
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board4.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5() { // 'Board 5' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton5()
-{
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board5.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6() { // 'Board 6' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6()
-{
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 	boardName = "imageAsset\\board6.jpg";
 	m_board.DoModal();
 }
 
+void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7() { // 'Random Board' 버튼 클릭 시
 
-void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7()
-{
+	// 난수 받아서 랜덤하게 보드 이미지 파일명 지정하고 게임 진행 다이얼로그 생성
+
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 
 	srand(time(NULL));
