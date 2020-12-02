@@ -128,7 +128,7 @@ bool GameProgress::IsGreenCatch(int pos) {
 	return false;
 }
 
-// 여기도 안바꿈.
+.
 Mat GameProgress::Binarization(Mat m_matImage) { // 이진화
 
 	int width = m_matImage.cols;
@@ -138,11 +138,13 @@ Mat GameProgress::Binarization(Mat m_matImage) { // 이진화
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
+			// 이미지 RGB2GRAY
 			blue = m_matImage.at<Vec3b>(x, y)[0];
 			green = m_matImage.at<Vec3b>(x, y)[1];
 			red = m_matImage.at<Vec3b>(x, y)[2];
 			color = (blue + green + red) / 3;
 
+			// threshold:180 -> 이진화
 			if (color > 180)
 				m_matImg.at<Vec3b>(x, y) = Vec3b(255, 255, 255);
 			else
@@ -155,20 +157,20 @@ Mat GameProgress::Binarization(Mat m_matImage) { // 이진화
 
 int GameProgress::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
 
-	// 여기에서 팀 정보 알아내지 않고 주사위 눈 개수만 세면 되니까 binarization 된 이미지 사용하면 될 것 같아서 컬러변수 하나만 만들었어오 (0 아니면 255)
+	
 	int count = 0;
 	int diceNum = 0;
 
 	int fw = filter.cols;
 	int fh = filter.rows;
 	Mat t_matImage;
-	resize(m_matImage, t_matImage, Size(fw, fh), 0, 0, 1);
-	t_matImage = Binarization(t_matImage);
+	resize(m_matImage, t_matImage, Size(fw, fh), 0, 0, 1); //이미지 필터와 같은 사이즈로 resize
+	t_matImage = Binarization(t_matImage);	//이미지 이진화
 
 	int width = t_matImage.cols;
 	int height = t_matImage.rows;
 
-
+	//필터와 이미지를 비교하며 점수 계산 
 	for (int row = 0; row < height; row++) {
 		for (int col = 0; col < width; col++) {
 			if (t_matImage.at<Vec3b>(col, row)[0] == 0) {
@@ -177,6 +179,7 @@ int GameProgress::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (Ca
 		}
 	}
 
+	//점수에 따라 숫자 분류
 	if (count < 1300)
 		diceNum = 1;
 	else if (count < 2000)
