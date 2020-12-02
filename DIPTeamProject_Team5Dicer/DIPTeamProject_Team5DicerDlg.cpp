@@ -28,6 +28,7 @@ void CDIPTeamProjectTeam5DicerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON5, boardbutton5);
 	DDX_Control(pDX, IDC_BUTTON6, boardbutton6);
 	DDX_Control(pDX, IDC_BUTTON7, boardbutton7);
+	DDX_Control(pDX, IDC_BUTTON8, ChooseBoard);
 }
 
 BEGIN_MESSAGE_MAP(CDIPTeamProjectTeam5DicerDlg, CDialogEx)
@@ -53,6 +54,7 @@ BOOL CDIPTeamProjectTeam5DicerDlg::OnInitDialog()
 	boardbutton5.LoadBitmaps(IDB_BITMAP5, NULL, NULL, NULL);
 	boardbutton6.LoadBitmaps(IDB_BITMAP6, NULL, NULL, NULL);
 	boardbutton7.LoadBitmaps(IDB_BITMAP7, NULL, NULL, NULL);
+	ChooseBoard.LoadBitmaps(IDB_BITMAP14, NULL, NULL, NULL);
 
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);

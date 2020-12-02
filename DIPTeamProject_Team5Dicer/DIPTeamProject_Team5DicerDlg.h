@@ -54,4 +54,5 @@ public:
 	CMyBitmapButton boardbutton5;
 	CMyBitmapButton boardbutton6;
 	CMyBitmapButton boardbutton7;
+	CMyBitmapButton ChooseBoard;
 };
