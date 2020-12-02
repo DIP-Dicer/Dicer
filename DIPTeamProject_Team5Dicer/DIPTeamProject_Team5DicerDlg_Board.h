@@ -32,7 +32,8 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
 
 public:
-	Mat m_matImg1, m_matImg2, m_matImg3, m_matImg4, m_matImage1, m_matImage2, m_matImage3, m_matImage4;
+	// 각각 주사위 이미지, 보드 이미지, 규칙 이미지를 저장한다.
+	Mat m_matImg1, m_matImg2, m_matImg3, m_matImage1, m_matImage2, m_matImage3;
 	BITMAPINFO* m_pBitmapInfo;
 	int imgSize = 400;
 	String boardFile;

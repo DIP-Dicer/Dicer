@@ -8,7 +8,7 @@ IMPLEMENT_DYNAMIC(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 
 // 게임 진행 화면
 
-DIPTeamProject_Team5DicerDlg_Board::DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent /*=nullptr*/)
+DIPTeamProject_Team5DicerDlg_Board::DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent)
 	: CDialogEx(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG1_BOARD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -20,14 +20,14 @@ DIPTeamProject_Team5DicerDlg_Board::~DIPTeamProject_Team5DicerDlg_Board()
 
 void DIPTeamProject_Team5DicerDlg_Board::DoDataExchange(CDataExchange* pDX)
 {
-	// 각 버튼에 변수 지정
+	// 각 버튼에 변수를 지정한다.
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, button1);
 	DDX_Control(pDX, IDC_BUTTON2, button2);
 	DDX_Control(pDX, IDC_BUTTON3, button3);
 }
 
-
+// 버튼의 각 ID와 버튼 클릭 함수를 연결한다.
 BEGIN_MESSAGE_MAP(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -36,20 +36,21 @@ BEGIN_MESSAGE_MAP(DIPTeamProject_Team5DicerDlg_Board, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
+// 다이얼로그가 처음 생성될 때 실행된다.
 BOOL DIPTeamProject_Team5DicerDlg_Board::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// 보드 선택 창에서 보드 이미지 파일 이름 받아오고 보드 선택 창 닫기
+	// 보드 선택 창에서 보드 이미지 파일 이름 받아오고 보드 선택 창을 닫는다.
 	CDIPTeamProjectTeam5DicerDlg* pDlg = (CDIPTeamProjectTeam5DicerDlg*)AfxGetMainWnd();
 	boardFile = pDlg->getBoardName();
 	pDlg->SendMessage(WM_CLOSE, 0, 0);
 
-	// Roll Dice 버튼만 활성화
+	// Roll Dice 버튼만 활성화한다.
 	GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
 	GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
 
-	// 버튼에 bitmap 이미지 입히기
+	// 버튼에 bitmap 이미지를 입힌다.
 	button1.LoadBitmaps(IDB_BITMAP8, NULL, NULL, IDB_BITMAP10);
 	button2.LoadBitmaps(IDB_BITMAP9, NULL, NULL, IDB_BITMAP11);
 	button3.LoadBitmaps(IDB_BITMAP12, IDB_BITMAP13, NULL, NULL);
@@ -82,13 +83,13 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 	{
 		CDialogEx::OnPaint();
 
-		// 보드 이미지 띄우기
+		// 보드 이미지를 띄운다.
 		m_matImg2 = imread(boardFile, -1);
 		resize(m_matImg2, m_matImage2, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage2.cols, m_matImage2.rows);
 		DrawBasicImage(IDC_PIC_VIEW2, m_matImage2);
 
-		// 규칙 이미지 띄우기
+		// 규칙 이미지를 띄운다.
 		m_matImg3 = imread("imageAsset\\rules.jpg", -1);
 		resize(m_matImg3, m_matImage3, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage3.cols, m_matImage3.rows);
@@ -105,7 +106,8 @@ HCURSOR DIPTeamProject_Team5DicerDlg_Board::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' 버튼 클릭 시
+// 'Roll Dice' 버튼 클릭 시
+void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() {
 
 	String fileName;
 	int red, blue, green;
@@ -114,10 +116,10 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' �
 
 	while (true) {
 
-		// 주사위 이미지 파일명 받아오기
+		// 주사위 이미지 파일명을 받아온다.
 		fileName = CurrentDiceTurn() + LoadDice();
 
-		// 주사위 이미지 띄우기
+		// 주사위 이미지를 띄운다.
 		m_matImg1 = imread(fileName, -1);
 		resize(m_matImg1, m_matImage1, Size(imgSize, imgSize), 0, 0, 1);
 		CreateBitmapInfo(m_matImage1.cols, m_matImage1.rows);
@@ -126,7 +128,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' �
 		width = m_matImage1.cols;
 		height = m_matImage1.rows;
 
-		// 주사위 이미지 색상 받아오기
+		// 주사위 이미지 색상을 받아온다.
 		for (int r = 0; r < height; r++) {
 			for (int c = 0; c < width; c++) {
 				blue = m_matImage1.at<Vec3b>(r, c)[0];
@@ -153,20 +155,20 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' �
 	}
 	gamePros.setDiceImage(m_matImage1);
 
-	// 주사위를 굴리면 Roll Dice 버튼 비활성화, Move Marker 버튼 활성화
+	// 주사위를 굴리면 Roll Dice 버튼은 비활성화, Move Marker 버튼은 활성화
 	if (end == false) {
 		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
 		GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
 	}
 
-	// 게임이 끝나면 모든 버튼 비활성화
+	// 게임이 끝나면 모든 버튼을 비활성화
 	else {
 		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
 		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
 	}
 }
 
-// GameProgress에서 받아온 순서 정보대로 주사위 이미지 파일명 지정
+// GameProgress에서 받아온 순서 정보대로 주사위 이미지 파일명을 지정한다.
 String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() {
 
 	String team;
@@ -187,7 +189,7 @@ String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() {
 	return team;
 }
 
-// 난수 받아서 랜덤하게 주사위 숫자 정보 결정 (주사위 이미지 파일명 지정)
+// 난수 받아서 랜덤하게 주사위 숫자 정보를 결정한다. (주사위 이미지 파일명 지정)
 String DIPTeamProject_Team5DicerDlg_Board::LoadDice() {
 
 	srand(time(NULL));
@@ -212,7 +214,7 @@ String DIPTeamProject_Team5DicerDlg_Board::LoadDice() {
 	return imgName;
 }
 
-// mat 이미지 별로 BITMAPINFO 구조체 생성
+// mat 이미지 별로 BITMAPINFO 구조체를 생성한다.
 void DIPTeamProject_Team5DicerDlg_Board::CreateBitmapInfo(int width, int height) {
 
 	if (m_pBitmapInfo != NULL) {
@@ -235,7 +237,7 @@ void DIPTeamProject_Team5DicerDlg_Board::CreateBitmapInfo(int width, int height)
 	m_pBitmapInfo->bmiHeader.biClrImportant = 0;
 }
 
-// 지정한 Picture control에 주사위와 보드 등의 이미지 띄우기
+// 지정한 Picture control에 맞춰서 주사위와 보드 등의 이미지를 띄운다.
 void DIPTeamProject_Team5DicerDlg_Board::DrawBasicImage(int id, Mat m_matImage) {
 
 	CClientDC dc(GetDlgItem(id));
@@ -250,16 +252,16 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBasicImage(int id, Mat m_matImage) 
 // 'Move Marker' 버튼 클릭 시
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() {
 
-	// 게임 말 움직이는 함수 호출
+	// 게임 말 움직이는 함수를 호출한다.
 	UpdateBoard();
 
-	// 말을 움직이면 Move Marker 버튼 비활성화, Roll Dice 버튼 활성화
+	// 말을 움직이면 Move Marker 버튼은 비활성화, Roll Dice 버튼은 활성화
 	if (end == false) {
 		GetDlgItem(IDC_BUTTON1)->EnableWindow(TRUE);
 		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
 	}
 
-	// 게임이 끝나면 모든 버튼 비활성화
+	// 게임이 끝나면 모든 버튼을 비활성화
 	else {
 		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
 		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
@@ -428,7 +430,7 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() {
 // 로고 버튼 클릭 시
 void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3() {
 
-	// Developers 다이얼로그 열기
+	// 개발자 목록 다이얼로그를 생성한다.
 	DeveloperDlg dlg;
 	dlg.DoModal();
 }

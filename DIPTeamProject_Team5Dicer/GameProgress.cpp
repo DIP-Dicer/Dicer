@@ -142,7 +142,7 @@ bool GameProgress::IsGreenCatch(int pos) {
 	return false;
 }
 
-// 픽셀 색상값 이진화 (흑백)
+// 픽셀 색상값을 흑백으로 이진화한다.
 Mat GameProgress::Binarization(Mat m_matImage) { 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
@@ -168,7 +168,7 @@ Mat GameProgress::Binarization(Mat m_matImage) {
 	return m_matImg;
 }
 
-// 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
+// 주사위 숫자 판별
 int GameProgress::RecognizeDiceNum(Mat m_matImage) {
 
 	
