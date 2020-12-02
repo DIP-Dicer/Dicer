@@ -1,52 +1,44 @@
 #include "pch.h"
 #include "GameProgress.h"
 
+
+// dice이미지를 setting한다.
 void GameProgress::setDiceImage(Mat m_matImage) {
 	diceImage = m_matImage.clone();
 }
 
+// Distribution 객체를 setting한다.(동일한 Cell을 이용해야 하므로)
 void GameProgress::setDistribution(Distribution tmp) {
 	gameInfo = tmp;
 }
 
+// 현재 차례 정보를 넘겨준다.
 int GameProgress::GetCurrentTurn() {
 	return turn;
 }
 
-int GameProgress::ChangeTurn(int nowTurn, int pos) {
-	switch (nowTurn) {
+// 차례를 바꾼다. 잡지 못했으면 차례를 넘기고, 잡았으면 한번 더 기회를 준다.
+int GameProgress::ChangeTurn(int pos) {
+	switch (turn) {
 	case 0:
-		redPos = pos;
-		if (IsBlueCatch(pos) || IsGreenCatch(pos)) {
-			turn = nowTurn;
-		}
-		else {
+		if (!IsBlueCatch(pos) && !IsGreenCatch(pos)) {
 			turn++;
 		}
 		break;
 	case 1:
-		bluePos = pos;
-		if (IsRedCatch(pos) || IsGreenCatch(pos)) {
-			turn = nowTurn;
-		}
-		else {
+		if ( !IsRedCatch(pos) && !IsGreenCatch(pos) ) {
 			turn++;
 		}
 		break;
 	case 2:
-		greenPos = pos;
-		if (IsRedCatch(pos) || IsBlueCatch(pos)) {
-			turn = nowTurn;
-		}
-		else {
-			turn = 0;
+		if (!IsRedCatch(pos) && !IsBlueCatch(pos)) {
+			turn=0;
 		}
 	}
-
 	return turn;
 }
 
-
+// 특수칸일때의 이동해야할 위치를 계산한다.
 int GameProgress::FindSpecialPosition(int pos) {
 
 	switch (gameInfo.cells[pos].info) {
@@ -73,24 +65,43 @@ int GameProgress::FindSpecialPosition(int pos) {
 	}
 }
 
-int  GameProgress::CalculatePosition(int pos) { // 현재 위치와 주사위 숫자 이용해서 이동할 위치 계산 (UpdateBoard 함수에서 호출됨)
+// 주사위 숫자에 따른 이동해야 할 위치를 계산한다.
+int  GameProgress::CalculatePosition(int pos) {
 
-	int pips = RecognizeDiceNum(Binarization(diceImage)); // 주사위 눈 개수
-
+	// 주사위 눈 개수
+	int pips = RecognizeDiceNum(Binarization(diceImage)); 
 	pos += pips;
 
+	// 전체 칸 수 보다 계산 된 위치 값이 크거나 같다면 마지막 칸을 넘어섰다는 것이다.
 	if (pos >= gameInfo.cells.size()) {
 		return 0;
 	}
+	// 기본 칸은 계산 된 위치를 바로 반환한다.
 	else if (gameInfo.cells[pos].info == 'd') {
 		return pos;
 	}
+	// 기본 칸이 아닌 경우에는 특수칸이므로, 특수칸에 대한 계산을 한다.
 	else {
 		return FindSpecialPosition(pos);
 	}
 }
 
-int GameProgress::GetPosition(int turn) {
+// 새로운 위치를 기존의 위치에 반영한다.
+void GameProgress::SetPosition(int pos) {
+	switch (turn) {
+	case 0:
+		redPos = pos;
+		break;
+	case 1:
+		bluePos = pos;
+		break;
+	case 2:
+		greenPos = pos;
+	}
+}
+
+// 기존의 위치를 반환한다.
+int GameProgress::GetPosition() {
 	switch (turn) {
 	case 0:
 		return redPos;
@@ -101,6 +112,7 @@ int GameProgress::GetPosition(int turn) {
 	}
 }
 
+// red팀의 말이 잡혔는지 확인한다.
 bool GameProgress::IsRedCatch(int pos) {
 	if (redPos == pos) {
 		catchFlag = 0;
@@ -110,6 +122,7 @@ bool GameProgress::IsRedCatch(int pos) {
 	return false;
 }
 
+// blue팀의 말이 잡혔는지 확인한다.
 bool GameProgress::IsBlueCatch(int pos) {
 	if (bluePos == pos) {
 		catchFlag = 1;
@@ -119,6 +132,7 @@ bool GameProgress::IsBlueCatch(int pos) {
 	return false;
 }
 
+// green팀의 말이 잡혔는지 확인한다.
 bool GameProgress::IsGreenCatch(int pos) {
 	if (greenPos == pos) {
 		catchFlag = 2;
@@ -128,8 +142,8 @@ bool GameProgress::IsGreenCatch(int pos) {
 	return false;
 }
 
-.
-Mat GameProgress::Binarization(Mat m_matImage) { // 이진화
+// 이진화
+Mat GameProgress::Binarization(Mat m_matImage) { 
 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
@@ -155,7 +169,8 @@ Mat GameProgress::Binarization(Mat m_matImage) { // 이진화
 	return m_matImg;
 }
 
-int GameProgress::RecognizeDiceNum(Mat m_matImage) { // 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
+// 주사위 숫자 알아내기 (CalculatePosition 함수에서 호출됨)
+int GameProgress::RecognizeDiceNum(Mat m_matImage) {
 
 	
 	int count = 0;

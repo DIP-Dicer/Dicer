@@ -247,7 +247,8 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // '말 이동�
 	}
 }
 
-Mat DIPTeamProject_Team5DicerDlg_Board::ResizeImage(int width, int heigth,string path) { // 말 이미지 크기를 보드 칸의 크기로 resize (UpdateBoard 함수에서 사용)
+// 이미지를 원하는 크기로 resize한다.
+Mat DIPTeamProject_Team5DicerDlg_Board::ResizeImage(int width, int heigth,string path) { 
 
 	Mat m_matImageTemp;
 
@@ -257,6 +258,7 @@ Mat DIPTeamProject_Team5DicerDlg_Board::ResizeImage(int width, int heigth,string
 	return m_matImageTemp;
 }
 
+// 보드 중간에 이미지를 그려준다.
 void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(string path) {
 	int width = m_matImage2.cols;
 	int height = m_matImage2.rows;
@@ -266,8 +268,10 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(string path) {
 	int bc = 0;
 	int br = 0;
 
+	// 띄울 이미지를 크기에 맞게 조절한다.
 	Mat centerImage = ResizeImage(201, 161, path);
 
+	// 보드 중간에 그려준다.
 	for (int r = cr - 80; r <= cr + 80; r++) {
 		bc = 0;
 		for (int c = cc - 100; c <= cc + 100; c++) {
@@ -280,6 +284,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(string path) {
 	DrawImage(IDC_PIC_VIEW2, m_matImage2);
 }
 
+// 현재 팀의 말 이미지 경로를 반환한다.
 string DIPTeamProject_Team5DicerDlg_Board::GetMarkerPath(int turn) {
 	switch (turn) {
 	case 0:
@@ -291,6 +296,7 @@ string DIPTeamProject_Team5DicerDlg_Board::GetMarkerPath(int turn) {
 	}
 }
 
+// winner에 해당하는 팀의 승리 이미지의 경로를 DrawBoardCenterImage로 전달한다. 
 void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(int turn) {
 	string path;
 
@@ -310,6 +316,7 @@ void DIPTeamProject_Team5DicerDlg_Board::ShowWinner(int turn) {
 	DrawBoardCenterImage(path);
 }
 
+// 잡힌 팀의 이미지의 경로를 DrawBoardCenterImage로 전달한다. 
 void DIPTeamProject_Team5DicerDlg_Board::DrawCatchImage(int catchCase) {
 	switch (catchCase) {
 	case 0:
@@ -327,6 +334,7 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawCatchImage(int catchCase) {
 	}
 }
 
+// 현재 차례 팀 이미지의 경로를 DrawBoardCenterImage로 전달한다. 
 void DIPTeamProject_Team5DicerDlg_Board::DrawTurnImage(int turn) {
 	switch (turn) {
 	case 0:
@@ -340,20 +348,19 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawTurnImage(int turn) {
 	}
 }
 
-void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 받아와서 보드에 적용시킴 (Button2를 클릭하면 호출됨)
+// board를 update(말 위치 이동, 잡기, 승리)를 하기 위한 각종 연산들을 수행한다.
+void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() {
 
 	int red, green, blue;
 
-	int turn = gamePros.GetCurrentTurn(); // 현재 순서인 팀 (말을 옮겨야 하는 팀)
+	int originalPos = gamePros.GetPosition();
 
-	int originalPos = gamePros.GetPosition(turn);
-
-	// 시작점에서 출발하는거니까 일단 0으로
+	// 처음 position은 -1로 되어 있는데, 이를 0으로 바꿔준다.
 	if (originalPos == -1) {
 		originalPos = 0;
 	}
 	else {
-		// 원래 말 있던 곳 되돌림. 검은색으로
+		// 말이 처음 position에 있는 것이 아니라면, 원래 위치의 칸 색을 이전으로 되돌려 놓는다.
 		for (int r = gameInfo.cells[originalPos].min.first; r <= gameInfo.cells[originalPos].max.first; r++) {
 			for (int c = gameInfo.cells[originalPos].min.second; c <= gameInfo.cells[originalPos].max.second; c++) {
 				m_matImage2.at<Vec3b>(r, c) = Vec3b(gameInfo.dark_color);
@@ -361,19 +368,21 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 		}
 	}
 
-	int newPos = gamePros.CalculatePosition(originalPos); // 이동할 위치 정보 가져옴
+	// 이동할 위치를 구한다.
+	int newPos = gamePros.CalculatePosition(originalPos);
 
+	// 이동해야할 위치가 0으로 구해진다면, 이겼음을 뜻한다.
 	if (newPos == 0) {
-		ShowWinner(turn);
-		GetDlgItem(IDC_BUTTON1)->EnableWindow(FALSE);
-		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+		ShowWinner(gamePros.GetCurrentTurn());
 		return;
 	}
 
+	// 칸마다 크기가 미세하게 달라서 칸 별로 칸에 맞는 말 이미지를 생성해야한다.
 	int width = gameInfo.cells[newPos].max.second - gameInfo.cells[newPos].min.second +1;
 	int height = gameInfo.cells[newPos].max.first - gameInfo.cells[newPos].min.first +1;
-	Mat marker = ResizeImage(width, height, GetMarkerPath(turn));
+	Mat marker = ResizeImage(width, height, GetMarkerPath(gamePros.GetCurrentTurn()));
 
+	// 이동해야하는 칸에 현재 팀의 말을 그려준다.
 	int my = 0;
 	int mx = 0;
 	for (int r = gameInfo.cells[newPos].min.first; r <= gameInfo.cells[newPos].max.first; r++) {
@@ -385,12 +394,16 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() { // 이동할 위치를 
 		my++;
 	}
 
-	int next = gamePros.ChangeTurn(turn, newPos);
+	// 계산 된 위치에 따라 말의 위치를 바꿔주고, 차례를 바꿔준다.
+	gamePros.SetPosition(newPos);
+	int next = gamePros.ChangeTurn(newPos);
 	DrawCatchImage(gamePros.catchFlag);
 	DrawTurnImage(next);
 
+	// 다시 catchFlag를 -1로 만들어준다.
 	gamePros.catchFlag = -1;
 
+	// 반영된 사항을 창에 그려준다.
 	DrawImage(IDC_PIC_VIEW2, m_matImage2);
 }
 
