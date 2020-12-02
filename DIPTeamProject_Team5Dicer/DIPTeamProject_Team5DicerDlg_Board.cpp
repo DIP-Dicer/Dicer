@@ -266,11 +266,11 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBoardCenterImage(string path) {
 	int bc = 0;
 	int br = 0;
 
-	Mat centerImage = ResizeImage(161, 121, path);
+	Mat centerImage = ResizeImage(201, 161, path);
 
-	for (int r = cr - 60; r <= cr + 60; r++) {
+	for (int r = cr - 80; r <= cr + 80; r++) {
 		bc = 0;
-		for (int c = cc - 80; c <= cc + 80; c++) {
+		for (int c = cc - 100; c <= cc + 100; c++) {
 			m_matImage2.at<Vec3b>(r, c) = centerImage.at<Vec3b>(br, bc);
 			bc++;
 		}
