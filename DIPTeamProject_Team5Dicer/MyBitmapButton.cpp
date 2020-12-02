@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "MyBitmapButton.h"
 
+// BitmapButton 클래스 오버라이드
+// 이미지를 버튼 크기에 맞추기
+
 CMyBitmapButton::CMyBitmapButton(void)
 {
 }

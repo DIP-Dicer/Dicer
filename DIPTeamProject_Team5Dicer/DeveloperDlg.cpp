@@ -5,6 +5,8 @@
 
 IMPLEMENT_DYNAMIC(DeveloperDlg, CDialogEx)
 
+// 개발자 목록 화면
+
 DeveloperDlg::DeveloperDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DEVELOPER, pParent)
 {

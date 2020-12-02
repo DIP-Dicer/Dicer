@@ -142,7 +142,7 @@ bool GameProgress::IsGreenCatch(int pos) {
 	return false;
 }
 
-
+// 픽셀 색상값 이진화 (흑백)
 Mat GameProgress::Binarization(Mat m_matImage) { 
 	int width = m_matImage.cols;
 	int height = m_matImage.rows;
@@ -209,7 +209,3 @@ int GameProgress::RecognizeDiceNum(Mat m_matImage) {
 
 	return diceNum;
 }
-
-
-
-

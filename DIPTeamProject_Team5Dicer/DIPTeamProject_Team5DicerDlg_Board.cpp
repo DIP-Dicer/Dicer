@@ -20,6 +20,7 @@ DIPTeamProject_Team5DicerDlg_Board::~DIPTeamProject_Team5DicerDlg_Board()
 
 void DIPTeamProject_Team5DicerDlg_Board::DoDataExchange(CDataExchange* pDX)
 {
+	// 각 버튼에 변수 지정
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, button1);
 	DDX_Control(pDX, IDC_BUTTON2, button2);
@@ -142,7 +143,7 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' �
 				break;
 		}
 
-		// 색과 팀 순서가 일치하면 반복문 탈출
+		// 색과 팀 순서가 일치하면 계속 진행
 		if (red > 150 && gamePros.GetCurrentTurn() == 0)
 			break;
 		else if (blue > 150 && gamePros.GetCurrentTurn() == 1)
@@ -165,10 +166,8 @@ void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton1() { // 'Roll Dice' �
 	}
 }
 
-
+// GameProgress에서 받아온 순서 정보대로 주사위 이미지 파일명 지정
 String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() {
-
-	// GameProgress에서 받아온 순서 정보대로 주사위 이미지 파일명 지정
 
 	String team;
 	int turn = gamePros.GetCurrentTurn();
@@ -188,9 +187,8 @@ String DIPTeamProject_Team5DicerDlg_Board::CurrentDiceTurn() {
 	return team;
 }
 
+// 난수 받아서 랜덤하게 주사위 숫자 정보 결정 (주사위 이미지 파일명 지정)
 String DIPTeamProject_Team5DicerDlg_Board::LoadDice() {
-
-	// 난수 받아서 랜덤하게 주사위 숫자 정보 결정 (주사위 이미지 파일명 지정)
 
 	srand(time(NULL));
 	int randNum = rand() % 6;
@@ -214,9 +212,8 @@ String DIPTeamProject_Team5DicerDlg_Board::LoadDice() {
 	return imgName;
 }
 
+// mat 이미지 별로 BITMAPINFO 구조체 생성
 void DIPTeamProject_Team5DicerDlg_Board::CreateBitmapInfo(int width, int height) {
-
-	// mat 이미지 별로 BITMAPINFO 구조체 생성
 
 	if (m_pBitmapInfo != NULL) {
 		delete m_pBitmapInfo;
@@ -238,9 +235,8 @@ void DIPTeamProject_Team5DicerDlg_Board::CreateBitmapInfo(int width, int height)
 	m_pBitmapInfo->bmiHeader.biClrImportant = 0;
 }
 
+// 지정한 Picture control에 주사위와 보드 등의 이미지 띄우기
 void DIPTeamProject_Team5DicerDlg_Board::DrawBasicImage(int id, Mat m_matImage) {
-
-	// 지정한 Picture control에 주사위와 보드 등의 이미지 띄우기
 
 	CClientDC dc(GetDlgItem(id));
 	CRect rect;
@@ -251,7 +247,8 @@ void DIPTeamProject_Team5DicerDlg_Board::DrawBasicImage(int id, Mat m_matImage) 
 	StretchDIBits(dc.GetSafeHdc(), 0, 0, rect.Width(), rect.Height(), 0, 0, m_matImage.cols, m_matImage.rows, m_matImage.data, m_pBitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 }
 
-void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() { // 'Move Marker' 버튼 클릭 시
+// 'Move Marker' 버튼 클릭 시
+void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton2() {
 
 	// 게임 말 움직이는 함수 호출
 	UpdateBoard();
@@ -428,11 +425,10 @@ void DIPTeamProject_Team5DicerDlg_Board::UpdateBoard() {
 	DrawBasicImage(IDC_PIC_VIEW2, m_matImage2);
 }
 
-
-void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3() { // 로고 버튼 클릭 시
+// 로고 버튼 클릭 시
+void DIPTeamProject_Team5DicerDlg_Board::OnBnClickedButton3() {
 
 	// Developers 다이얼로그 열기
-
 	DeveloperDlg dlg;
 	dlg.DoModal();
 }

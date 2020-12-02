@@ -7,13 +7,10 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-/*#ifdef _DEBUG
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#endif*/
 
 // 보드 선택 화면
 
-CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=nullptr*/)
+CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent)
 	: CDialogEx(IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -21,6 +18,8 @@ CDIPTeamProjectTeam5DicerDlg::CDIPTeamProjectTeam5DicerDlg(CWnd* pParent /*=null
 
 void CDIPTeamProjectTeam5DicerDlg::DoDataExchange(CDataExchange* pDX)
 {
+	// 각 버튼에 변수 지정
+
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, boardbutton1);
 	DDX_Control(pDX, IDC_BUTTON2, boardbutton2);
@@ -101,7 +100,6 @@ String CDIPTeamProjectTeam5DicerDlg::getBoardName() {
 }
 
 // 보드 이미지 파일명 지정하고 게임 진행 다이얼로그 생성
-
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton1() { // 'Board 1' 버튼 클릭 시
 
 	DIPTeamProject_Team5DicerDlg_Board m_board;
@@ -147,7 +145,6 @@ void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton6() { // 'Board 6' 버튼 �
 void CDIPTeamProjectTeam5DicerDlg::OnBnClickedButton7() { // 'Random Board' 버튼 클릭 시
 
 	// 난수 받아서 랜덤하게 보드 이미지 파일명 지정하고 게임 진행 다이얼로그 생성
-
 	DIPTeamProject_Team5DicerDlg_Board m_board;
 
 	srand(time(NULL));

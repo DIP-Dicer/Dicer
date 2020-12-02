@@ -24,7 +24,6 @@ public:
 	DIPTeamProject_Team5DicerDlg_Board(CWnd* pParent = nullptr);
 	virtual ~DIPTeamProject_Team5DicerDlg_Board();
 
-// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIPTEAMPROJECT_TEAM5DICER_DIALOG1_BOARD };
 #endif
