@@ -128,7 +128,6 @@ bool GameProgress::IsGreenCatch(int pos) {
 	return false;
 }
 
-.
 Mat GameProgress::Binarization(Mat m_matImage) { // ¿Ã¡¯»≠
 
 	int width = m_matImage.cols;
