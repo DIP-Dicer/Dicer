@@ -54,6 +54,7 @@ public:
 	void DrawCatchImage(int turn);
 
 private:
+	// GameProgress, Distribution 클래스의 객체를 생성한다.
 	GameProgress gamePros;
 	Distribution gameInfo;
 

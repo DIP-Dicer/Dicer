@@ -95,7 +95,9 @@ void DIPTeamProject_Team5DicerDlg_Board::OnPaint()
 		CreateBitmapInfo(m_matImage3.cols, m_matImage3.rows);
 		DrawBasicImage(IDC_PIC_VIEW3, m_matImage3);
 
+		//gameInfo를 통해 board 이미지를 전달한다.
 		gameInfo.SetBoardImage(m_matImage2);
+		//gamePros에게 동일한 Distribution 객체를 전달한다.
 		gamePros.setDistribution(gameInfo);
 		DrawBoardCenterImage("imageAsset\\base_redTurn.jpg");
 	}
